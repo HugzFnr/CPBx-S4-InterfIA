@@ -30,11 +30,11 @@ for y in range (0,hauteur,cote_PIXEL):
     for x in range (0,largeur,cote_PIXEL):
         L1.append(0)
         L2.append(0)
-        L1[x//cote_PIXEL]=reference.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="lightgrey")
+        L1[x//cote_PIXEL]=reference.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white")
         C1[y//cote_PIXEL].append(L1[x//cote_PIXEL]) #(C1[ligne])[colonne] correspond à un PIXEL du canvas de référence
         L2[x//cote_PIXEL]=dessin.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white")
         C2[y//cote_PIXEL].append(L2[x//cote_PIXEL]) #(C2[ligne])[colonne] correspond à un PIXEL du canvas de dessin
-        
+                
 if echelle == 1:
     peindreIMG = PhotoImage(file="peindreIMG1.gif") #Icône 64x64 à l'échelle 1 et 100x100 echelle 1.6
     ligneIMG = PhotoImage(file="ligneIMG1.gif")
@@ -71,9 +71,6 @@ elif echelle == 1.6:
     blancIMG = PhotoImage(file="blancIMG1,6.gif")
     noirIMG = PhotoImage(file="noirIMG1,6.gif")
     
-
-reference.itemconfigure(C1[0][0],fill="red") #ce test révèle que la colonne 0 n'existe pas, ça commence à 1, alors que la ligne 0 existe
-
 #Menu principal
 peindre=Button(fenetre, image=peindreIMG)
 peindre.grid(row=0, column=0, rowspan=6, columnspan=6)
@@ -123,6 +120,11 @@ blanc.grid(row=9, column=32, rowspan=3, columnspan=2)
 
 noir=Button(fenetre, image=noirIMG)
 noir.grid(row=9, column=34, rowspan=3,columnspan=2)
+
+def colorier(l,c,color):
+    dessin.itemconfigure(C2[l][c],fill=color)
+    actualiser(l,c,etat[color])
+    
 
 fenetre.mainloop()
 
