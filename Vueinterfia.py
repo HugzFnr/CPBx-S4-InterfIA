@@ -45,6 +45,7 @@ elif echelle == 1.6:
 
 reference.itemconfigure(C1[0][0],fill="red") #ce test révèle que la colonne 0 n'existe pas, ça commence à 1, alors que la ligne 0 existe
 
+#Menu principal
 peindre=Button(fenetre, image=icone)
 peindre.grid(row=0, column=0, rowspan=6, columnspan=6)
 
@@ -75,6 +76,7 @@ rotat.grid(row=0, column=48, rowspan=6, columnspan=6)
 suppr=Button(fenetre, image=icone)
 suppr.grid(row=0, column=54, rowspan=6, columnspan=6)
 
+#Couleurs
 rouge=Button(fenetre, image=palette)
 rouge.grid(row=6, column=30, rowspan=3, columnspan=2)
 
