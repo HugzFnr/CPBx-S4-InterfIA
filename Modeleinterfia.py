@@ -2,27 +2,32 @@
 
 from tkinter import *
 
-from Vueinterfia import *
-from Controleurinterfia import *
+class modele():
+    def __init__(self,grille):
+        
+        self.valeur={}
+        self.valeur["red"]=0 #on associe une valeur numérique à chaque couleur de PIXEL à l'aide du dictionnaire "valeur"
+        self.valeur["green"]=1
+        self.valeur["blue"]=2
+        self.valeur["yellow"]=3
+        self.valeur["white"]=4
+        self.valeur["black"]=5 
+        self.grille=grille
+        
+        self.M=[]
+        self.R=[]
+        
+        for y in range (0,hauteur//cote_PIXEL): #pour pouvoir stocker l'état des deux grilles
+            self.M.append([])                      #dans une matrice numérique
+            for x in range (0,largeur//cote_PIXEL): 
+                self.R.append(4)
+                self.M[y].append(self.R[x])
 
-etat={}
-etat["red"]=0
-etat["green"]=1
-etat["blue"]=2
-etat["yellow"]=3
-etat["white"]=4
-etat["black"]=5
+        def actualiser(self,l,c,couleur):
+            self.M[l][c]=self.valeur[couleur]
 
-M1=[]
-M2=[]
-R1=[]
-R2=[]
 
-for y in range (0,hauteur,cote_PIXEL):
-    M1.append([])
-    M2.append([])
-    for x in range (0,largeur,cote_PIXEL):
-        R1.append(4)
-        R2.append(4)
+
+    
 
 
