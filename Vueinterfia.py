@@ -43,6 +43,9 @@ class Vue():
             ctrlzIMG = PhotoImage(file="ctrlzIMG1.gif")
             selecIMG = PhotoImage(file="selectionnerIMG1.gif")
             ctrlcIMG = PhotoImage(file="ctrlcIMG1.gif")
+            ctrlvIMG = PhotoImage(file="ctrlvIMG1.gif")
+            rotatIMG = PhotoImage(file="rotatIMG1.gif")
+            supprIMG = PhotoImage(file="supprIMG1.gif")
             
             icone = PhotoImage(file="PHicon1.gif")
 
@@ -61,6 +64,9 @@ class Vue():
             ctrlzIMG = PhotoImage(file="ctrlzIMG1,6.gif")
             selecIMG = PhotoImage(file="selectionnerIMG1,6.gif")
             ctrlcIMG = PhotoImage(file="ctrlcIMG1,6.gif")
+            ctrlvIMG = PhotoImage(file="ctrlvIMG1,6.gif")
+            rotatIMG = PhotoImage(file="rotatIMG1,6.gif")
+            supprIMG = PhotoImage(file="supprIMG1,6.gif")
             
             icone = PhotoImage(file="PHicon1,6.gif")
 
@@ -93,13 +99,13 @@ class Vue():
         self.ctrlc=Button(self.fenetre, image=ctrlcIMG)
         self.ctrlc.grid(row=0, column=36, rowspan=6, columnspan=6)
 
-        self.ctrlv=Button(self.fenetre, image=icone)
+        self.ctrlv=Button(self.fenetre, image=ctrlvIMG)
         self.ctrlv.grid(row=0, column=42, rowspan=6, columnspan=6)
 
-        self.rotat=Button(self.fenetre, image=icone)
+        self.rotat=Button(self.fenetre, image=rotatIMG)
         self.rotat.grid(row=0, column=48, rowspan=6, columnspan=6)
 
-        self.suppr=Button(self.fenetre, image=icone)
+        self.suppr=Button(self.fenetre, image=supprIMG)
         self.suppr.grid(row=0, column=54, rowspan=6, columnspan=6)
 
         #Boutons palette
