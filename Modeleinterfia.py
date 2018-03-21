@@ -1,8 +1,9 @@
 #Modèle interfia
 
 from tkinter import *
+from Parametresinterfia import *
 
-class modele():
+class Modele():
     def __init__(self,grille):
         
         self.valeur={}
@@ -23,8 +24,9 @@ class modele():
                 self.R.append(4)
                 self.M[y].append(self.R[x])
 
-        def actualiser(self,l,c,couleur):
+    def actualiser(self,l,c,couleur):
             self.M[l][c]=self.valeur[couleur]
+            print(self.M[l][c])
 
 
 
