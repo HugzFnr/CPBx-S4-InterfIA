@@ -72,9 +72,9 @@ class Vue():
             for x in range (0,largeur,cote_PIXEL):
                 self.L1.append(0)
                 self.L2.append(0)
-                self.L1[x//cote_PIXEL]=self.reference.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white")
+                self.L1[x//cote_PIXEL]=self.reference.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white",outline="grey")
                 self.C1[y//cote_PIXEL].append(self.L1[x//cote_PIXEL]) #(C1[ligne])[colonne] correspond à un PIXEL du canvas de référence
-                self.L2[x//cote_PIXEL]=self.dessin.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white")
+                self.L2[x//cote_PIXEL]=self.dessin.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white",outline="grey")
                 self.C2[y//cote_PIXEL].append(self.L2[x//cote_PIXEL]) #(C2[ligne])[colonne] correspond à un PIXEL du canvas de dessin
             
         #Boutons principaux
@@ -90,17 +90,17 @@ class Vue():
         self.gomme=Button(self.fenetre, image=self.gommeIMG)
         self.gomme.grid(row=0, column=18, rowspan=6, columnspan=6)
 
-        self.ctrlz=Button(self.fenetre, image=self.ctrlzIMG)
-        self.ctrlz.grid(row=0, column=24, rowspan=6, columnspan=6)
+        self.annuler=Button(self.fenetre, image=self.ctrlzIMG)
+        self.annuler.grid(row=0, column=24, rowspan=6, columnspan=6)
 
         self.selec=Button(self.fenetre, image=self.selecIMG)
         self.selec.grid(row=0, column=30, rowspan=6, columnspan=6)
 
-        self.ctrlc=Button(self.fenetre, image=self.ctrlcIMG)
-        self.ctrlc.grid(row=0, column=36, rowspan=6, columnspan=6)
+        self.copier=Button(self.fenetre, image=self.ctrlcIMG)
+        self.copier.grid(row=0, column=36, rowspan=6, columnspan=6)
 
-        self.ctrlv=Button(self.fenetre, image=self.ctrlvIMG)
-        self.ctrlv.grid(row=0, column=42, rowspan=6, columnspan=6)
+        self.coller=Button(self.fenetre, image=self.ctrlvIMG)
+        self.coller.grid(row=0, column=42, rowspan=6, columnspan=6)
 
         self.rotat=Button(self.fenetre, image=self.rotatIMG)
         self.rotat.grid(row=0, column=48, rowspan=6, columnspan=6)
@@ -108,40 +108,59 @@ class Vue():
         self.suppr=Button(self.fenetre, image=self.supprIMG)
         self.suppr.grid(row=0, column=54, rowspan=6, columnspan=6)
 
+        
         #Boutons palette
-        self.rouge=Button(self.fenetre, image=self.rougeIMG)
+        self.couleur_active="red"
+        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge)
         self.rouge.grid(row=6, column=30, rowspan=3, columnspan=2)
 
-        self.vert=Button(self.fenetre, image=self.vertIMG)
+        self.vert=Button(self.fenetre, image=self.vertIMG,command=self.vert)
         self.vert.grid(row=6, column=32, rowspan=3, columnspan=2)
 
-        self.bleu=Button(self.fenetre, image=self.bleuIMG)
+        self.bleu=Button(self.fenetre, image=self.bleuIMG,command=self.bleu)
         self.bleu.grid(row=6, column=34, rowspan=3, columnspan=2)
 
-        self.jaune=Button(self.fenetre, image=self.jauneIMG)
+        self.jaune=Button(self.fenetre, image=self.jauneIMG,command=self.jaune)
         self.jaune.grid(row=9, column=30, rowspan=3, columnspan=2)
 
-        self.blanc=Button(self.fenetre, image=self.blancIMG)
+        self.blanc=Button(self.fenetre, image=self.blancIMG,command=self.blanc)
         self.blanc.grid(row=9, column=32, rowspan=3, columnspan=2)
 
-        self.noir=Button(self.fenetre, image=self.noirIMG)
+        self.noir=Button(self.fenetre, image=self.noirIMG,command=self.noir)
         self.noir.grid(row=9, column=34, rowspan=3,columnspan=2)
 
-    def colorier(self,event): 
-        if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
-            l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
-            c=event.x//cote_PIXEL
-            self.dessin.itemconfigure(self.C2[l][c],fill="yellow")
+    def rouge(self):
+        self.couleur_active="red"
+        self.bouton_actif(self.rouge)
+    def vert(self):
+        self.couleur_active="green"
+        self.bouton_actif(self.vert)
+    def bleu(self):
+        self.couleur_active="blue"
+        self.bouton_actif(self.bleu)
+    def jaune(self):
+        self.couleur_active="yellow"
+        self.bouton_actif(self.jaune)
+    def blanc(self):
+        self.couleur_active="white"
+        self.bouton_actif(self.blanc)
+    def noir(self):
+        self.couleur_active="black"
+        self.bouton_actif(self.noir)
 
     def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 5 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 4 pour le dernier
         self.raccourci=Button(self.fenetre,image=bouton['image'])
+        self.raccourci.configure(command=bouton['command'])
         self.raccourci.grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
 
-    
+    def bouton_actif(self,bouton):
+        bouton.configure(relief="sunken")
 
+    def bouton_inactif(self,bouton):
+        bouton.configure(relief="raised")
 
-
-
-
-
-
+    def crayonclic(self,event): 
+        if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
+            l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
+            c=event.x//cote_PIXEL
+            self.dessin.itemconfigure(self.C2[l][c],fill=self.couleur_active)
