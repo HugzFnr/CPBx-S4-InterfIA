@@ -4,7 +4,7 @@ from tkinter import *
 from Parametresinterfia import *
 
 class Modele():
-    def __init__(self,grille):
+    def __init__(self):
         
         self.valeur={}
         self.valeur["red"]=0 #on associe une valeur numérique à chaque couleur de PIXEL à l'aide du dictionnaire "valeur"
@@ -12,8 +12,11 @@ class Modele():
         self.valeur["blue"]=2
         self.valeur["yellow"]=3
         self.valeur["white"]=4
-        self.valeur["black"]=5 
-        self.grille=grille
+        self.valeur["black"]=5
+
+        self.inv_valeur={}
+        for cle,valeur in self.valeur.items(): #on crée le dictionnaire inverse
+            self.inv_valeur[valeur]=cle
         
         self.M=[]
         self.R=[]
@@ -26,8 +29,14 @@ class Modele():
 
     def actualiser(self,l,c,couleur):
             self.M[l][c]=self.valeur[couleur]
-            print(self.M[l][c])
+    
+    def couleur_PIXEL(self,l,c):
+        return self.inv_valeur[self.M[l][c]]
 
+    def prntcouleur_PIXEL(self,l,c):
+        print(self.inv_valeur[self.M[l][c]],"ligne=",l,"colonne=",c)
+        
+    
 
 
     

@@ -110,8 +110,8 @@ class Vue():
 
         
         #Boutons palette
-        self.couleur_active="red"
-        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge)
+        self.couleur_active="red" #la valeur par défaut est rouge
+        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge,relief="sunken")  #donc le bouton est de relief appuyé (=sunken)par défaut
         self.rouge.grid(row=6, column=30, rowspan=3, columnspan=2)
 
         self.vert=Button(self.fenetre, image=self.vertIMG,command=self.vert)
@@ -129,29 +129,36 @@ class Vue():
         self.noir=Button(self.fenetre, image=self.noirIMG,command=self.noir)
         self.noir.grid(row=9, column=34, rowspan=3,columnspan=2)
 
-    def rouge(self):
+    def rouge(self): #les fonctions très simples pour chaque bouton de la palette, qui modifient la valeur de self.couleur_active
         self.couleur_active="red"
+        self.desactiver_palette()
         self.bouton_actif(self.rouge)
     def vert(self):
         self.couleur_active="green"
+        self.desactiver_palette()
         self.bouton_actif(self.vert)
     def bleu(self):
         self.couleur_active="blue"
+        self.desactiver_palette()
         self.bouton_actif(self.bleu)
     def jaune(self):
         self.couleur_active="yellow"
+        self.desactiver_palette()
         self.bouton_actif(self.jaune)
     def blanc(self):
         self.couleur_active="white"
+        self.desactiver_palette()
         self.bouton_actif(self.blanc)
     def noir(self):
         self.couleur_active="black"
+        self.desactiver_palette()
         self.bouton_actif(self.noir)
 
     def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 5 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 4 pour le dernier
-        self.raccourci=Button(self.fenetre,image=bouton['image'])
-        self.raccourci.configure(command=bouton['command'])
-        self.raccourci.grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
+        self.raccourcis=[0,0,0,0,0] #ils sont stockés dans une liste et indexés par leur emplacement
+        self.raccourcis[emplacement]=self.raccourci=Button(self.fenetre,image=bouton['image'])
+        self.raccourcis[emplacement].configure(command=bouton['command'])
+        self.raccourcis[emplacement].grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
 
     def bouton_actif(self,bouton):
         bouton.configure(relief="sunken")
@@ -159,8 +166,40 @@ class Vue():
     def bouton_inactif(self,bouton):
         bouton.configure(relief="raised")
 
+    def desactiver_boutons(self):
+        self.bouton_inactif(self.peindre)
+        self.bouton_inactif(self.ligne)
+        self.bouton_inactif(self.crayon)
+        self.bouton_inactif(self.gomme)
+        self.bouton_inactif(self.annuler)
+        self.bouton_inactif(self.selec)
+        self.bouton_inactif(self.copier)
+        self.bouton_inactif(self.coller)
+        self.bouton_inactif(self.rotat)
+        self.bouton_inactif(self.suppr)
+
+    def desactiver_palette(self):
+        self.bouton_inactif(self.rouge)
+        self.bouton_inactif(self.vert)
+        self.bouton_inactif(self.bleu)
+        self.bouton_inactif(self.jaune)
+        self.bouton_inactif(self.blanc)
+        self.bouton_inactif(self.noir)
+
+    def colorier_PIXEL(self,l,c,couleur):
+        self.dessin.itemconfigure(self.C2[l][c],fill=couleur)        
+    
     def crayonclic(self,event): 
         if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
             l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
             c=event.x//cote_PIXEL
-            self.dessin.itemconfigure(self.C2[l][c],fill=self.couleur_active)
+            self.colorier_PIXEL(l,c,self.couleur_active)
+
+    def gommeclic(self,event):
+         if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
+            l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
+            c=event.x//cote_PIXEL
+            self.colorier_PIXEL(l,c,"white")
+        
+    
+        
