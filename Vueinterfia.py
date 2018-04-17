@@ -76,7 +76,8 @@ class Vue():
                 self.C1[y//cote_PIXEL].append(self.L1[x//cote_PIXEL]) #(C1[ligne])[colonne] correspond à un PIXEL du canvas de référence
                 self.L2[x//cote_PIXEL]=self.dessin.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white",outline="grey")
                 self.C2[y//cote_PIXEL].append(self.L2[x//cote_PIXEL]) #(C2[ligne])[colonne] correspond à un PIXEL du canvas de dessin
-            
+
+        self.selection=0    
         #Boutons principaux
         self.peindre=Button(self.fenetre, image=self.peindreIMG)
         self.peindre.grid(row=0, column=0, rowspan=6, columnspan=6)
@@ -205,8 +206,19 @@ class Vue():
         if event.x<=largeur and event.y<=hauteur:
             self.l1=event.y//cote_PIXEL 
             self.c1=event.x//cote_PIXEL
-            
 
+    def selecclic1(self,event):
+        if event.x<=largeur and event.y<=hauteur:
+            self.l1=event.y//cote_PIXEL
+            self.c1=event.x//cote_PIXEL
+    def selecclic2(self,event):
+        if event.x<=largeur and event.y<=hauteur:
+            l=event.y//cote_PIXEL
+            c=event.x//cote_PIXEL
+            self.selection=self.dessin.create_rectangle(self.c1*cote_PIXEL,self.l1*cote_PIXEL,c*cote_PIXEL,l*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
+                 
+    def resetselec(self):
+            self.dessin.delete(self.selection)
         
         
         

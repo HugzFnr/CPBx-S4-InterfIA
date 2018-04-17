@@ -20,12 +20,17 @@ class Modele():
         
         self.M=[]
         self.R=[]
-        
+        self.selectionC=[]
+        self.selectionL=[] #la liste de liste utilisée par la fonction sélection
+
         for y in range (0,hauteur//cote_PIXEL): #pour pouvoir stocker l'état des deux grilles
-            self.M.append([])                      #dans une matrice numérique
+            self.M.append([])                    #dans une matrice numérique
+            self.selectionC.append([])
             for x in range (0,largeur//cote_PIXEL): 
                 self.R.append(4)
                 self.M[y].append(self.R[x])
+                self.selectionL.append(-1)
+                self.selectionC[y].append(self.selectionL[x])
 
     def actualiser(self,l,c,couleur):
             self.M[l][c]=self.valeur[couleur]
@@ -35,7 +40,11 @@ class Modele():
 
     def prntcouleur_PIXEL(self,l,c):
         print(self.inv_valeur[self.M[l][c]],"ligne=",l,"colonne=",c)
-        
+
+    def resetselec(self):
+        for y in range (0,hauteur//cote_PIXEL):
+            for x in range (0,largeur//cote_PIXEL):
+                self.selectionC[y][x]=-1        
     
 
 
