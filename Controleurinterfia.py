@@ -23,11 +23,13 @@ Use_crayon=0
 Use_gomme=0
 
 #les fonctions avec le nom du bouton (gomme,peindre,...) appellent les fonctions
-# en -er (gommer,peindrer -RIP langue française-) qui appellent les fonctions de type boutonclic
+# en -er (gommer,peindrer -désolé langue française-) qui appellent les fonctions de type boutonclic
 # tout cela pour pouvoir assigner aux boutons des fonctions qui ne prennent pas de paramètre event,
 # comme un clic de souris par exemple, en argument; et pour pouvoir actualiser le modèle
 
 def crayonner(event):
+    global Use_crayon
+    Use_crayon=Use_crayon+1
     Fenetre.crayonclic(event)
     Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,Fenetre.couleur_active)
     Dessin.couleur_PIXEL(event.y//cote_PIXEL,event.x//cote_PIXEL)
@@ -41,6 +43,8 @@ def crayon():
     Clic_crayon=Clic_crayon+1
 
 def gommer(event):
+    global Use_gomme
+    Use_gomme=Use_gomme+1
     Fenetre.gommeclic(event)
     Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,"white")
 
@@ -56,7 +60,7 @@ def marque(ligne,colonne,A): #utile pour que la fonction peindre_recursif ne rev
     A[ligne][colonne]=1
             
 def peindre_recursif(li,co,couleur,A):
-
+    
     if (couleur==Dessin.couleur_PIXEL(li,co)) and (A[li][co]!=1):
         Fenetre.colorier_PIXEL(li,co,Fenetre.couleur_active)
         Dessin.actualiser(li,co,Fenetre.couleur_active)
@@ -83,6 +87,8 @@ def peindre_recursif(li,co,couleur,A):
             
         
 def peindreclic(event):
+    global Use_peindre
+    Use_peindre=Use_peindre+1
     l=event.y//cote_PIXEL
     c=event.x//cote_PIXEL
     coul=Dessin.couleur_PIXEL(l,c)
@@ -113,6 +119,33 @@ def printPIXEL(): #Getclic, printPIXEL et prntcouleur_PIXEL sont 3 fonctions tem
     Fenetre.dessin.bind("<Button-1>",getclic)
     Fenetre.desactiver_boutons()
     Fenetre.bouton_actif(Fenetre.rotat)
+
+def ligner1(event):
+    Fenetre.ligneclic1(event)
+
+def ligner2(event):
+    global Use_ligne
+    Use_ligne=Use_ligne+1
+    if event.x<=largeur and event.y<=hauteur:
+        l2=event.y//cote_PIXEL
+        c2=event.x//cote_PIXEL
+        if Fenetre.l1==l2:
+            for x in range (Fenetre.c1,c2+1,1):
+                Fenetre.colorier_PIXEL(Fenetre.l1,x,Fenetre.couleur_active)
+                Dessin.actualiser(Fenetre.l1,x,Fenetre.couleur_active)
+        if Fenetre.c1==c2:
+            for y in range (Fenetre.l1,l2+1,1): #la fonction ligne ne fonctionne que sur une ligne ou colonne droite
+                Fenetre.colorier_PIXEL(y,Fenetre.c1,Fenetre.couleur_active)
+                Dessin.actualiser(y,Fenetre.c1,Fenetre.couleur_active)   
+
+def ligne():
+    Fenetre.dessin.bind("<Button-1>",ligner1)
+    Fenetre.dessin.bind("<B1-ButtonRelease>",ligner2)
+    Fenetre.dessin.unbind("<B1-Motion>")
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.ligne)
+    global Clic_ligne
+    Clic_ligne=Clic_ligne+1
     
 
 ##Fenetre.dessin.unbind("<B1-Motion>") #pour enlever un binding
@@ -126,7 +159,7 @@ Fenetre.generation() #on génère tout l'interface
 Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici
 Fenetre.gomme.configure(command=gomme)  #pour pouvoir utiliser des fonctions du contrôleur                     
 Fenetre.peindre.configure(command=peindre)
-
+Fenetre.ligne.configure(command=ligne)
 Fenetre.rotat.configure(command=printPIXEL) #temporaire, pour tester la correspondance canvas/modèle
 
 Reference=Modele()

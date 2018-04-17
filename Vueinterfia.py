@@ -96,16 +96,16 @@ class Vue():
         self.selec=Button(self.fenetre, image=self.selecIMG)
         self.selec.grid(row=0, column=30, rowspan=6, columnspan=6)
 
-        self.copier=Button(self.fenetre, image=self.ctrlcIMG)
+        self.copier=Button(self.fenetre, image=self.ctrlcIMG,state='disabled') #ces boutons sont désactivés par défaut
         self.copier.grid(row=0, column=36, rowspan=6, columnspan=6)
 
-        self.coller=Button(self.fenetre, image=self.ctrlvIMG)
+        self.coller=Button(self.fenetre, image=self.ctrlvIMG,state='disabled')
         self.coller.grid(row=0, column=42, rowspan=6, columnspan=6)
 
-        self.rotat=Button(self.fenetre, image=self.rotatIMG)
+        self.rotat=Button(self.fenetre, image=self.rotatIMG,state='disabled')
         self.rotat.grid(row=0, column=48, rowspan=6, columnspan=6)
 
-        self.suppr=Button(self.fenetre, image=self.supprIMG)
+        self.suppr=Button(self.fenetre, image=self.supprIMG,state='disabled')
         self.suppr.grid(row=0, column=54, rowspan=6, columnspan=6)
 
         
@@ -196,10 +196,19 @@ class Vue():
             self.colorier_PIXEL(l,c,self.couleur_active)
 
     def gommeclic(self,event):
-         if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
-            l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
+         if event.x<=largeur and event.y<=hauteur:
+            l=event.y//cote_PIXEL 
             c=event.x//cote_PIXEL
             self.colorier_PIXEL(l,c,"white")
+
+    def ligneclic1(self,event):
+        if event.x<=largeur and event.y<=hauteur:
+            self.l1=event.y//cote_PIXEL 
+            self.c1=event.x//cote_PIXEL
+            
+
+        
+        
         
     
         
