@@ -191,34 +191,52 @@ class Vue():
         self.dessin.itemconfigure(self.C2[l][c],fill=couleur)        
     
     def crayonclic(self,event): 
-        if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
-            l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
-            c=event.x//cote_PIXEL
-            self.colorier_PIXEL(l,c,self.couleur_active)
+        l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
+        c=event.x//cote_PIXEL
+        self.colorier_PIXEL(l,c,self.couleur_active)
 
     def gommeclic(self,event):
-         if event.x<=largeur and event.y<=hauteur:
-            l=event.y//cote_PIXEL 
-            c=event.x//cote_PIXEL
-            self.colorier_PIXEL(l,c,"white")
+        l=event.y//cote_PIXEL 
+        c=event.x//cote_PIXEL
+        self.colorier_PIXEL(l,c,"white")
 
     def ligneclic1(self,event):
-        if event.x<=largeur and event.y<=hauteur:
+        if event.x<largeur and event.y<hauteur:
             self.l1=event.y//cote_PIXEL 
             self.c1=event.x//cote_PIXEL
 
     def selecclic1(self,event):
-        if event.x<=largeur and event.y<=hauteur:
+        if event.x<largeur and event.y<hauteur:
             self.l1=event.y//cote_PIXEL
             self.c1=event.x//cote_PIXEL
     def selecclic2(self,event):
-        if event.x<=largeur and event.y<=hauteur:
-            l=event.y//cote_PIXEL
-            c=event.x//cote_PIXEL
-            self.selection=self.dessin.create_rectangle(self.c1*cote_PIXEL,self.l1*cote_PIXEL,c*cote_PIXEL,l*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
+        l=event.y//cote_PIXEL
+        c=event.x//cote_PIXEL
+        if event.x<largeur and event.y<hauteur:
+            if self.c1<=c:
+                deltax2=1
+                deltax1=0
+            else :
+                deltax2=0
+                deltax1=1
+            if self.l1<=l:
+                deltay2=1
+                deltay1=0
+            else:
+                deltay1=1
+                deltay2=0 #on compense pour que la sélection prenne une zone équivalente peu importe les 2 directions (haut vers bas, gauche vers droite,etc...)
+            self.selection=self.dessin.create_rectangle((self.c1+deltax1)*cote_PIXEL,(self.l1+deltay1)*cote_PIXEL,(c+deltax2)*cote_PIXEL,(l+deltax2)*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
+            self.copier.configure(state='normal')
+            self.rotat.configure(state='normal')
+            self.suppr.configure(state='normal')
                  
     def resetselec(self):
             self.dessin.delete(self.selection)
+            self.copier.configure(state='disabled')
+            self.rotat.configure(state='disabled')
+            self.suppr.configure(state='disabled')
+
+    
         
         
         

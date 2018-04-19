@@ -23,6 +23,11 @@ class Modele():
         self.selectionC=[]
         self.selectionL=[] #la liste de liste utilisée par la fonction sélection
 
+        self.x1selec=0 #utilisés pour délimiter la partie sélectionnée
+        self.x2selec=0
+        self.y1selec=0
+        self.y2selec=0
+
         for y in range (0,hauteur//cote_PIXEL): #pour pouvoir stocker l'état des deux grilles
             self.M.append([])                    #dans une matrice numérique
             self.selectionC.append([])
