@@ -7,10 +7,10 @@ class Modele():
     def __init__(self):
         
         self.valeur={}
-        self.valeur["red"]=0 #on associe une valeur numérique à chaque couleur de PIXEL à l'aide du dictionnaire "valeur"
-        self.valeur["green"]=1
+        self.valeur["red2"]=0 #on associe une valeur numérique à chaque couleur de PIXEL à l'aide du dictionnaire "valeur"
+        self.valeur["lime green"]=1
         self.valeur["blue"]=2
-        self.valeur["yellow"]=3
+        self.valeur["yellow2"]=3
         self.valeur["white"]=4
         self.valeur["black"]=5
 

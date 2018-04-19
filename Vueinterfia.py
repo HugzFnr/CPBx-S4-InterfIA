@@ -111,7 +111,7 @@ class Vue():
 
         
         #Boutons palette
-        self.couleur_active="red" #la valeur par défaut est rouge
+        self.couleur_active="red2" #la valeur par défaut est rouge
         self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge,relief="sunken")  #donc le bouton est de relief appuyé (=sunken)par défaut
         self.rouge.grid(row=6, column=30, rowspan=3, columnspan=2)
 
@@ -131,11 +131,11 @@ class Vue():
         self.noir.grid(row=9, column=34, rowspan=3,columnspan=2)
 
     def rouge(self): #les fonctions très simples pour chaque bouton de la palette, qui modifient la valeur de self.couleur_active
-        self.couleur_active="red"
+        self.couleur_active="red2"
         self.desactiver_palette()
         self.bouton_actif(self.rouge)
     def vert(self):
-        self.couleur_active="green"
+        self.couleur_active="lime green"
         self.desactiver_palette()
         self.bouton_actif(self.vert)
     def bleu(self):
@@ -143,7 +143,7 @@ class Vue():
         self.desactiver_palette()
         self.bouton_actif(self.bleu)
     def jaune(self):
-        self.couleur_active="yellow"
+        self.couleur_active="yellow2"
         self.desactiver_palette()
         self.bouton_actif(self.jaune)
     def blanc(self):
@@ -196,7 +196,7 @@ class Vue():
             self.c1=event.x//cote_PIXEL
 
     def crayonclic(self,event): 
-        l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
+        l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est
         c=event.x//cote_PIXEL
         self.colorier_PIXEL(l,c,self.couleur_active)
 

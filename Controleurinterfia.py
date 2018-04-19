@@ -112,12 +112,21 @@ def ligner2(event):
             deltax=-1
         if Fenetre.l1==l2:
             for x in range (Fenetre.c1,c2+deltax,sensx):
-                Fenetre.colorier_PIXEL(Fenetre.l1,x,Fenetre.couleur_active)
-                Dessin.actualiser(Fenetre.l1,x,Fenetre.couleur_active)
-        if Fenetre.c1==c2:
-            for y in range (Fenetre.l1,l2+deltay,sensy): #la fonction ligne ne fonctionne que sur une ligne ou colonne droite
-                Fenetre.colorier_PIXEL(y,Fenetre.c1,Fenetre.couleur_active)
-                Dessin.actualiser(y,Fenetre.c1,Fenetre.couleur_active)   
+                Fenetre.colorier_PIXEL(l2,x,Fenetre.couleur_active)
+                Dessin.actualiser(l2,x,Fenetre.couleur_active)
+        elif Fenetre.c1==c2:
+            for y in range (Fenetre.l1,l2+deltay,sensy):
+                Fenetre.colorier_PIXEL(y,c2,Fenetre.couleur_active)
+                Dessin.actualiser(y,c2,Fenetre.couleur_active)
+        else:
+            diffx=abs(Fenetre.c1-c2)
+            diffy=abs(Fenetre.l1-l2)
+            for x in range (Fenetre.c1,c2+deltax,sensx):
+                for y in range (Fenetre.l1,l2+deltay,sensy):
+                    if ((y-Fenetre.l1)*sensy//(diffy/diffx))==((x-Fenetre.c1)*sensx//(diffx/diffx)): #permet de tracer ce qui ressemble le plus à une ligne diagonale dans n'importe quelle situation différente d'une ligne droite
+                        Fenetre.colorier_PIXEL(y,x,Fenetre.couleur_active)
+                        Dessin.actualiser(y,x,Fenetre.couleur_active)
+                    
 
 def ligne():
     Fenetre.resetselec()
