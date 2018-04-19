@@ -190,6 +190,11 @@ class Vue():
     def colorier_PIXEL(self,l,c,couleur):
         self.dessin.itemconfigure(self.C2[l][c],fill=couleur)        
     
+    def ligneclic1(self,event):
+        if event.x<largeur and event.y<hauteur:
+            self.l1=event.y//cote_PIXEL 
+            self.c1=event.x//cote_PIXEL
+
     def crayonclic(self,event): 
         l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est dans la grille de dessin
         c=event.x//cote_PIXEL
@@ -199,11 +204,6 @@ class Vue():
         l=event.y//cote_PIXEL 
         c=event.x//cote_PIXEL
         self.colorier_PIXEL(l,c,"white")
-
-    def ligneclic1(self,event):
-        if event.x<largeur and event.y<hauteur:
-            self.l1=event.y//cote_PIXEL 
-            self.c1=event.x//cote_PIXEL
 
     def selecclic1(self,event):
         if event.x<largeur and event.y<hauteur:

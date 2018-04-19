@@ -30,41 +30,7 @@ Use_gomme=0
 # tout cela pour pouvoir assigner aux boutons des fonctions qui ne prennent pas de paramètre event,
 # comme un clic de souris par exemple, en argument; et pour pouvoir actualiser le modèle
 
-def crayonner(event):
-    global Use_crayon
-    Use_crayon=Use_crayon+1
-    if event.x<largeur and event.y<hauteur: #garde-fou de non sortie du canvas
-        Fenetre.crayonclic(event)
-        Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,Fenetre.couleur_active)
-
-def crayon():
-    Fenetre.resetselec()
-    Dessin.resetselec()
-    Fenetre.dessin.bind("<Button-1>",crayonner)
-    Fenetre.dessin.bind("<B1-Motion>",crayonner)
-    Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.crayon)
-    global Clic_crayon
-    Clic_crayon=Clic_crayon+1
-
-def gommer(event):
-    global Use_gomme
-    Use_gomme=Use_gomme+1
-    if event.x<largeur and event.y<hauteur:
-        Fenetre.gommeclic(event)
-        Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,"white")
-
-def gomme():
-    Fenetre.resetselec()
-    Dessin.resetselec()
-    Fenetre.dessin.bind("<Button-1>",gommer)
-    Fenetre.dessin.bind("<B1-Motion>",gommer)
-    Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.gomme)
-    global Clic_gomme
-    Clic_gomme=Clic_gomme+1
+#les fonctions associés aux boutons sont écrits dans l'ordre de l'interface en lecture de gauche à droite
 
 def marque(ligne,colonne,A): #utile pour que la fonction peindre_recursif ne revienne pas sur des pixels déjà traités
     A[ligne][colonne]=1
@@ -121,18 +87,7 @@ def peindre():
     Fenetre.bouton_actif(Fenetre.peindre)
     global Clic_peindre
     Clic_peindre=Clic_peindre+1
-    
-def getclic(event):
-    l=event.y//cote_PIXEL
-    c=event.x//cote_PIXEL
-    Dessin.prntcouleur_PIXEL(l,c)
 
-def printPIXEL(): #Getclic, printPIXEL et prntcouleur_PIXEL sont 3 fonctions temporaires pour vérifier la correspondance entre canvas et modèle
-    Fenetre.dessin.unbind("<B1-Motion>")
-    Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.dessin.bind("<Button-1>",getclic)
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.rotat)
 
 def ligner1(event):
     Fenetre.ligneclic1(event)
@@ -140,15 +95,27 @@ def ligner1(event):
 def ligner2(event):
     global Use_ligne
     Use_ligne=Use_ligne+1
-    if event.x<=largeur and event.y<=hauteur:
+    if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
         l2=event.y//cote_PIXEL
         c2=event.x//cote_PIXEL
+        if Fenetre.l1<=l2: #ces sens sont utiles pour faire une double boucle for qui fonctionne dans tous les sens de parcours de l'écran
+            sensy=1
+            deltay=1 
+        else :
+            sensy=-1
+            deltay=-1
+        if Fenetre.c1<=c2:
+            sensx=1
+            deltax=1
+        else:
+            sensx=-1
+            deltax=-1
         if Fenetre.l1==l2:
-            for x in range (Fenetre.c1,c2+1,1):
+            for x in range (Fenetre.c1,c2+deltax,sensx):
                 Fenetre.colorier_PIXEL(Fenetre.l1,x,Fenetre.couleur_active)
                 Dessin.actualiser(Fenetre.l1,x,Fenetre.couleur_active)
         if Fenetre.c1==c2:
-            for y in range (Fenetre.l1,l2+1,1): #la fonction ligne ne fonctionne que sur une ligne ou colonne droite
+            for y in range (Fenetre.l1,l2+deltay,sensy): #la fonction ligne ne fonctionne que sur une ligne ou colonne droite
                 Fenetre.colorier_PIXEL(y,Fenetre.c1,Fenetre.couleur_active)
                 Dessin.actualiser(y,Fenetre.c1,Fenetre.couleur_active)   
 
@@ -163,6 +130,45 @@ def ligne():
     global Clic_ligne
     Clic_ligne=Clic_ligne+1
 
+
+def crayonner(event):
+    global Use_crayon
+    Use_crayon=Use_crayon+1
+    if event.x<largeur and event.y<hauteur: 
+        Fenetre.crayonclic(event)
+        Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,Fenetre.couleur_active)
+
+def crayon():
+    Fenetre.resetselec()
+    Dessin.resetselec()
+    Fenetre.dessin.bind("<Button-1>",crayonner)
+    Fenetre.dessin.bind("<B1-Motion>",crayonner)
+    Fenetre.dessin.unbind("<B1-ButtonRelease>")
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.crayon)
+    global Clic_crayon
+    Clic_crayon=Clic_crayon+1
+
+
+def gommer(event):
+    global Use_gomme
+    Use_gomme=Use_gomme+1
+    if event.x<largeur and event.y<hauteur:
+        Fenetre.gommeclic(event)
+        Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,"white")
+
+def gomme():
+    Fenetre.resetselec()
+    Dessin.resetselec()
+    Fenetre.dessin.bind("<Button-1>",gommer)
+    Fenetre.dessin.bind("<B1-Motion>",gommer)
+    Fenetre.dessin.unbind("<B1-ButtonRelease>")
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.gomme)
+    global Clic_gomme
+    Clic_gomme=Clic_gomme+1
+
+
 def selecer1(event):
     Fenetre.resetselec()
     Dessin.resetselec()
@@ -176,9 +182,9 @@ def selecer2(event):
         Dessin.y1selec=Fenetre.l1
         Dessin.x2selec=c2
         Dessin.y2selec=l2
-        if Dessin.y1selec<=Dessin.y2selec: #ces sens sont utiles pour faire une double boucle for qui fonctionne dans tous les sens de parcours de l'écran
+        if Dessin.y1selec<=Dessin.y2selec:
             sensy=1
-            deltay=1 #les delta assurent la correspondance avec le rectangle de sélection visuelle
+            deltay=1 #ces delta assurent la correspondance avec le rectangle de sélection visuelle (fichier Vue)
         else :
             sensy=-1
             deltay=-1
@@ -202,6 +208,17 @@ def selec():
     global Clic_selec
     Clic_selec=Clic_selec+1
 
+def getclic(event):
+    l=event.y//cote_PIXEL
+    c=event.x//cote_PIXEL
+    Dessin.prntcouleur_PIXEL(l,c)
+
+def printPIXEL(): #Getclic, printPIXEL et prntcouleur_PIXEL sont 3 fonctions temporaires pour vérifier la correspondance entre canvas et modèle
+    Fenetre.dessin.unbind("<B1-Motion>")
+    Fenetre.dessin.unbind("<B1-ButtonRelease>")
+    Fenetre.dessin.bind("<Button-1>",getclic)
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.rotat)
 
 def suppr():
     if Dessin.y1selec<=Dessin.y2selec:
@@ -228,13 +245,12 @@ def suppr():
 ##Fenetre.dessin.unbind("<B1-Motion>") #pour enlever un binding
 #print(event.widget) le widget sur lequel se passe l'event
 
-   
 Fenetre=Vue()
 Fenetre.genicones()
 Fenetre.generation() #on génère tout l'interface
 
 Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici
-Fenetre.gomme.configure(command=gomme)  #pour pouvoir utiliser des fonctions du contrôleur                     
+Fenetre.gomme.configure(command=gomme)  #pour pouvoir utiliser des fonctions issu du fichier contrôleur                     
 Fenetre.peindre.configure(command=peindre)
 Fenetre.ligne.configure(command=ligne)
 Fenetre.selec.configure(command=selec)
