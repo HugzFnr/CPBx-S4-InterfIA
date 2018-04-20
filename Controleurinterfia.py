@@ -121,11 +121,18 @@ def ligner2(event):
         else:
             diffx=abs(Fenetre.c1-c2)
             diffy=abs(Fenetre.l1-l2)
-            for x in range (Fenetre.c1,c2+deltax,sensx):
+            if diffy>=diffx:
+                for x in range (Fenetre.c1,c2+deltax,sensx):
+                    for y in range (Fenetre.l1,l2+deltay,sensy):
+                        if ((y-Fenetre.l1)*sensy//(diffy/diffx))==((x-Fenetre.c1)*sensx): #permet de tracer ce qui ressemble le plus à une ligne diagonale dans n'importe quelle situation différente d'une ligne droite
+                            Fenetre.colorier_PIXEL(y,x,Fenetre.couleur_active)
+                            Dessin.actualiser(y,x,Fenetre.couleur_active)
+            elif diffx>diffy:
                 for y in range (Fenetre.l1,l2+deltay,sensy):
-                    if ((y-Fenetre.l1)*sensy//(diffy/diffx))==((x-Fenetre.c1)*sensx//(diffx/diffx)): #permet de tracer ce qui ressemble le plus à une ligne diagonale dans n'importe quelle situation différente d'une ligne droite
-                        Fenetre.colorier_PIXEL(y,x,Fenetre.couleur_active)
-                        Dessin.actualiser(y,x,Fenetre.couleur_active)
+                    for x in range (Fenetre.c1,c2+deltax,sensx):
+                        if ((x-Fenetre.c1)*sensx//(diffx/diffy))==((y-Fenetre.l1)*sensy):
+                            Fenetre.colorier_PIXEL(y,x,Fenetre.couleur_active)
+                            Dessin.actualiser(y,x,Fenetre.couleur_active)
                     
 
 def ligne():
