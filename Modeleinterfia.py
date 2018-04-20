@@ -18,10 +18,12 @@ class Modele():
         for cle,valeur in self.valeur.items(): #on crée le dictionnaire inverse
             self.inv_valeur[valeur]=cle
         
-        self.M=[]
-        self.R=[]
+        self.M=[] #la liste des lignes
+        self.R=[] #la liste des PIXELS, rangés de gauche à droite, qui sera rangée dans la liste des colonnes
+
         self.selectionC=[]
         self.selectionL=[] #la liste de liste utilisée par la fonction sélection
+
         self.copieC=[]
         self.copieL=[] #la matrice utilisée par la fonction copier
 
@@ -36,6 +38,7 @@ class Modele():
             for x in range (0,largeur//cote_PIXEL): 
                 self.R.append(4)
                 self.M[y].append(self.R[x])
+
                 self.selectionL.append(-1)
                 self.selectionC[y].append(self.selectionL[x])
 

@@ -9,8 +9,7 @@ class Vue():
 
         self.fenetre.title("Interfia")
 
-        
-
+        self.progress=StringVar()
     def loop(self):
         self.fenetre.mainloop()
 
@@ -55,7 +54,7 @@ class Vue():
     def generation(self):
         self.reference=Canvas(self.fenetre, width=largeur, height=hauteur, bg="grey")
         self.dessin=Canvas(self.fenetre, width=largeur, height=hauteur, bg="white")
-        #ces dimensions remplissent convenablement un écran 1280x768 en echelle=1, 1.6 sur les petits au CREMI
+        #ces dimensions remplissent convenablement un écran 1280x768 en echelle=1, alors qu'1.6 fonctionne bien sur du 20 pouces
 
         #une colonne et une ligne sont définies par la moitié du plus petit format d'icône
         #6 lignes sur 6 colonnes = 1 grosse icone (1)=70x70 pixels
@@ -73,9 +72,9 @@ class Vue():
                 self.L1.append(0)
                 self.L2.append(0)
                 self.L1[x//cote_PIXEL]=self.reference.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white",outline="grey")
-                self.C1[y//cote_PIXEL].append(self.L1[x//cote_PIXEL]) #(C1[ligne])[colonne] correspond à un PIXEL du canvas de référence
+                self.C1[y//cote_PIXEL].append(self.L1[x//cote_PIXEL]) #(C1[ligne])[colonne] correspond à un PIXEL du canvas de référence (gauche)
                 self.L2[x//cote_PIXEL]=self.dessin.create_rectangle(x,y,x+cote_PIXEL,y+cote_PIXEL,fill="white",outline="grey")
-                self.C2[y//cote_PIXEL].append(self.L2[x//cote_PIXEL]) #(C2[ligne])[colonne] correspond à un PIXEL du canvas de dessin
+                self.C2[y//cote_PIXEL].append(self.L2[x//cote_PIXEL]) #(C2[ligne])[colonne] correspond à un PIXEL du canvas de dessin (droite)
 
         self.selection=0    
         #Boutons principaux
@@ -97,7 +96,7 @@ class Vue():
         self.selec=Button(self.fenetre, image=self.selecIMG)
         self.selec.grid(row=0, column=30, rowspan=6, columnspan=6)
 
-        self.copier=Button(self.fenetre, image=self.ctrlcIMG,state='disabled') #ces boutons sont désactivés par défaut
+        self.copier=Button(self.fenetre, image=self.ctrlcIMG,state='disabled') #ces boutons sont désactivés et grisés par défaut, ils auront besoin d'une sélection ou d'un copier
         self.copier.grid(row=0, column=36, rowspan=6, columnspan=6)
 
         self.coller=Button(self.fenetre, image=self.ctrlvIMG,state='disabled')
@@ -107,7 +106,11 @@ class Vue():
         self.rotat.grid(row=0, column=48, rowspan=6, columnspan=6)
 
         self.suppr=Button(self.fenetre, image=self.supprIMG,state='disabled')
-        self.suppr.grid(row=0, column=54, rowspan=6, columnspan=6)
+        self.suppr.grid(row=0, column=48, rowspan=6, columnspan=6)
+
+        self.progress=IntVar()
+        self.score=Message(self.fenetre,aspect=500,bg='gold',justify='center',relief='sunken')
+        self.score.grid(row=0, column=54,rowspan=6,columnspan=15)
 
         
         #Boutons palette
@@ -130,7 +133,7 @@ class Vue():
         self.noir=Button(self.fenetre, image=self.noirIMG,command=self.noir)
         self.noir.grid(row=9, column=34, rowspan=3,columnspan=2)
 
-    def rouge(self): #les fonctions très simples pour chaque bouton de la palette, qui modifient la valeur de self.couleur_active
+    def rouge(self): #les fonctions très simples pour chaque bouton de la palette, qui modifient la valeur de self.couleur_active utilisée pour dessiner
         self.couleur_active="red2"
         self.desactiver_palette()
         self.bouton_actif(self.rouge)
@@ -164,7 +167,7 @@ class Vue():
     def bouton_actif(self,bouton):
         bouton.configure(relief="sunken")
 
-    def bouton_inactif(self,bouton):
+    def bouton_inactif(self,bouton): 
         bouton.configure(relief="raised")
 
     def desactiver_boutons(self):
@@ -177,7 +180,7 @@ class Vue():
         self.bouton_inactif(self.copier)
         self.bouton_inactif(self.coller)
         self.bouton_inactif(self.rotat)
-        self.bouton_inactif(self.suppr)
+        self.bouton_inactif(self.suppr) #ces trois fonctions permettent de visualiser quel bouton est actif
 
     def desactiver_palette(self):
         self.bouton_inactif(self.rouge)
@@ -187,8 +190,11 @@ class Vue():
         self.bouton_inactif(self.blanc)
         self.bouton_inactif(self.noir)
 
-    def colorier_PIXEL(self,l,c,couleur):
-        self.dessin.itemconfigure(self.C2[l][c],fill=couleur)        
+    def colorier_PIXEL(self,l,c,couleur): #fonction de base souvent réutilisée pour colorier un pixel de la zone de dessin
+        self.dessin.itemconfigure(self.C2[l][c],fill=couleur)
+
+    def colorier_PIXEL_modele(self,l,c,couleur):
+        self.reference.itemconfigure(self.C1[l][c],fill=couleur)
     
     def ligneclic1(self,event):
         if event.x<largeur and event.y<hauteur:
