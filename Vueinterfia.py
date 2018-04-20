@@ -55,7 +55,7 @@ class Vue():
     def generation(self):
         self.reference=Canvas(self.fenetre, width=largeur, height=hauteur, bg="grey")
         self.dessin=Canvas(self.fenetre, width=largeur, height=hauteur, bg="white")
-        #ces dimensions remplissent convenablement un écran 1280x768 en echelle=1, 1.6 sur les petits CREMI
+        #ces dimensions remplissent convenablement un écran 1280x768 en echelle=1, 1.6 sur les petits au CREMI
 
         #une colonne et une ligne sont définies par la moitié du plus petit format d'icône
         #6 lignes sur 6 colonnes = 1 grosse icone (1)=70x70 pixels
@@ -112,7 +112,7 @@ class Vue():
         
         #Boutons palette
         self.couleur_active="red2" #la valeur par défaut est rouge
-        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge,relief="sunken")  #donc le bouton est de relief appuyé (=sunken)par défaut
+        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge,relief="sunken")  #donc par défaut, le bouton est de relief appuyé (=sunken)par défaut
         self.rouge.grid(row=6, column=30, rowspan=3, columnspan=2)
 
         self.vert=Button(self.fenetre, image=self.vertIMG,command=self.vert)
@@ -225,7 +225,7 @@ class Vue():
             else:
                 deltay1=1
                 deltay2=0 #on compense pour que la sélection prenne une zone équivalente peu importe les 2 directions (haut vers bas, gauche vers droite,etc...)
-            self.selection=self.dessin.create_rectangle((self.c1+deltax1)*cote_PIXEL,(self.l1+deltay1)*cote_PIXEL,(c+deltax2)*cote_PIXEL,(l+deltax2)*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
+            self.selection=self.dessin.create_rectangle((self.c1+deltax1)*cote_PIXEL,(self.l1+deltay1)*cote_PIXEL,(c+deltax2)*cote_PIXEL,(l+deltay2)*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
             self.copier.configure(state='normal')
             self.rotat.configure(state='normal')
             self.suppr.configure(state='normal')

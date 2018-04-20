@@ -1,5 +1,6 @@
 #Contrôleur interfia
 from tkinter import *
+import copy
 
 from Vueinterfia import *
 from Modeleinterfia import *
@@ -21,6 +22,7 @@ Use_peindre=0 #le nombre d'utilisations des fonctions qui modifient le clic
 Use_ligne=0
 Use_crayon=0
 Use_gomme=0
+Use_coller=0
 
 
 
@@ -199,7 +201,7 @@ def selecer2(event):
         Dessin.x2selec=c2
         Dessin.y2selec=l2
         if Dessin.y1selec<=Dessin.y2selec:
-            sensy=1
+            sensy=1 #les sens ont la même utilité que pour la fonction ligne
             deltay=1 #ces delta assurent la correspondance avec le rectangle de sélection visuelle (fichier Vue)
         else :
             sensy=-1
@@ -210,9 +212,10 @@ def selecer2(event):
         else:
             sensx=-1
             deltax=-1
-        for x in range (Fenetre.c1,c2,sensx):
-            for y in range (Fenetre.l1,l2,sensy):
+        for y in range (Fenetre.l1,l2+deltay,sensy):
+            for x in range (Fenetre.c1,c2+deltax,sensx):
                 Dessin.selectionC[y][x]=Dessin.couleur_PIXEL(y,x)
+        print(Dessin.selectionC)
     Fenetre.selecclic2(event)
                 
 def selec():
@@ -224,6 +227,54 @@ def selec():
     global Clic_selec
     Clic_selec=Clic_selec+1
 
+def copier():
+    Fenetre.coller.configure(state='normal')
+    Dessin.copieC.clear()
+    Dessin.copieL.clear()
+
+    Dessin.copieC=copy.deepcopy(Dessin.selectionC) #cette méthode, importé en début de programme permet de cloner la matrice de sélection
+
+    for k in range(len(Dessin.copieC)-1,-1,-1): #je peux ensuite enlever tous les -1 de la matrice de sélection pour la réduire à ce qui a vraiment été sélectionné
+        long=len(Dessin.copieC[k])
+        for i in range(len(Dessin.copieC[k])-1,-1,-1):
+            if (Dessin.copieC[k][i])==(-1):
+                del (Dessin.copieC[k][i])
+        if (Dessin.copieC[k])==[]:
+            del (Dessin.copieC[k])
+##    for p in range (len(Dessin.copieC)):
+##        for q in Dessin.copieC[p]:
+##            Dessin.copieL.append(0)
+##            Dessin.copieL[p]=q
+    print(Dessin.copieC)
+    
+    global Clic_copier
+    Clic_copier=Clic_copier+1
+
+
+def collerclic(event):
+    h=event.y//cote_PIXEL
+    l=event.x//cote_PIXEL
+    print("h=",h,"l=",l)
+    for y in range (h,h+len(Dessin.copieC)):
+        for x in range (l,l+len(Dessin.copieC[0])):
+            if ((x<largeur//cote_PIXEL) and (y<hauteur//cote_PIXEL) and (x>=0) and (y>=0)):
+                    Fenetre.colorier_PIXEL(y,x,Dessin.copieC[y-h][x-l])
+                    Dessin.actualiser(y,x,Dessin.copieC[y-h][x-l])
+    global Use_coller
+    Use_coller=Use_coller+1
+
+def coller():
+    Fenetre.resetselec()
+    Dessin.resetselec()
+    Fenetre.dessin.bind("<Button-1>",collerclic)
+    Fenetre.dessin.unbind("<B1-ButtonRelease>")
+    Fenetre.dessin.unbind("<B1-Motion>")
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.coller)
+    global Clic_coller
+    Clic_coller=Clic_coller+1
+
+    
 def getclic(event):
     l=event.y//cote_PIXEL
     c=event.x//cote_PIXEL
@@ -258,6 +309,8 @@ def suppr():
     global Clic_suppr
     Clic_suppr=Clic_suppr+1
 
+
+
 ##Fenetre.dessin.unbind("<B1-Motion>") #pour enlever un binding
 #print(event.widget) le widget sur lequel se passe l'event
 
@@ -266,10 +319,12 @@ Fenetre.genicones()
 Fenetre.generation() #on génère tout l'interface
 
 Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici
-Fenetre.gomme.configure(command=gomme)  #pour pouvoir utiliser des fonctions issu du fichier contrôleur                     
+Fenetre.gomme.configure(command=gomme)  #pour pouvoir utiliser des fonctions issues du fichier contrôleur                     
 Fenetre.peindre.configure(command=peindre)
 Fenetre.ligne.configure(command=ligne)
 Fenetre.selec.configure(command=selec)
+Fenetre.copier.configure(command=copier)
+Fenetre.coller.configure(command=coller)
 Fenetre.suppr.configure(command=suppr)
 Fenetre.rotat.configure(command=printPIXEL) #temporaire, pour tester la correspondance canvas/modèle
 
