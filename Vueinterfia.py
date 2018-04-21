@@ -10,6 +10,10 @@ class Vue():
         self.fenetre.title("Interfia")
 
         self.progress=StringVar()
+        
+        self.raccourcis=[0,0,0,0,0,0,0,0,0]
+        self.preraccourcis=[0,0,0,0,0,0,0,0,0]
+
     def loop(self):
         self.fenetre.mainloop()
 
@@ -23,7 +27,6 @@ class Vue():
             self.selecIMG = PhotoImage(file="selectionnerIMG1.gif")
             self.ctrlcIMG = PhotoImage(file="ctrlcIMG1.gif")
             self.ctrlvIMG = PhotoImage(file="ctrlvIMG1.gif")
-            self.rotatIMG = PhotoImage(file="rotatIMG1.gif")
             self.supprIMG = PhotoImage(file="supprIMG1.gif")
             self.rougeIMG = PhotoImage(file="rougeIMG1.gif")  #21x32 à l'échelle 1 et 33x50 echelle 1.6
             self.vertIMG = PhotoImage(file="vertIMG1.gif")
@@ -41,7 +44,6 @@ class Vue():
             self.selecIMG = PhotoImage(file="selectionnerIMG1,6.gif")
             self.ctrlcIMG = PhotoImage(file="ctrlcIMG1,6.gif")
             self.ctrlvIMG = PhotoImage(file="ctrlvIMG1,6.gif")
-            self.rotatIMG = PhotoImage(file="rotatIMG1,6.gif")
             self.supprIMG = PhotoImage(file="supprIMG1,6.gif")
             self.rougeIMG = PhotoImage(file="rougeIMG1,6.gif")
             self.vertIMG = PhotoImage(file="vertIMG1,6.gif")
@@ -155,12 +157,27 @@ class Vue():
         self.desactiver_palette()
         self.bouton_actif(self.noir)
 
-    def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 4 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 4 pour le dernier
-        self.raccourcis=[0,0,0,0] #ils sont stockés dans une liste et indexés par leur emplacement
-        self.raccourcis[emplacement]=self.raccourci=Button(self.fenetre,image=bouton['image'])
-        self.raccourcis[emplacement].configure(command=bouton['command'])
+    def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 4 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 3 pour le dernier
+        #ils sont stockés dans une liste et indexés par leur emplacement
+        self.raccourcis[emplacement]=Button(self.fenetre,image=bouton['image'])
+        self.raccourcis[emplacement].configure(command=bouton['command'],state=bouton['state'])
         self.raccourcis[emplacement].grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
 
+    def update_raccourcis(self): #voir fonction  adaptation du modèle
+        for p in range (4):
+            if self.preraccourcis[p]!=0:
+                self.creer_raccourci(self.preraccourcis[p],p)
+            elif self.preraccourcis[p]==0:
+                q=p
+                while q<8 and self.preraccourcis[q]==0:
+                    q=q+1
+                if self.preraccourcis[q]!=0:
+                    self.creer_raccourci(self.preraccourcis[q],p)
+                    self.preraccourcis[q]=0
+                elif self.raccourcis[p]!=0:
+                    self.raccourcis[p].destroy()
+                    
+            
     def bouton_actif(self,bouton):
         bouton.configure(relief="sunken")
 

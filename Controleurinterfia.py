@@ -15,6 +15,7 @@ Clic_selec=0
 Clic_copier=0
 Clic_coller=0
 Clic_suppr=0
+Clic_suivant=0
 
 Use_peindre=0 #le nombre d'utilisations des fonctions qui modifient le clic
 Use_ligne=0
@@ -87,6 +88,7 @@ def peindre():
     Fenetre.bouton_actif(Fenetre.peindre)
     global Clic_peindre
     Clic_peindre=Clic_peindre+1
+    adaptation(Fenetre.peindre)
 
 def ligner1(event):
     Fenetre.ligneclic1(event)
@@ -145,7 +147,7 @@ def ligne():
     Fenetre.bouton_actif(Fenetre.ligne)
     global Clic_ligne
     Clic_ligne=Clic_ligne+1
-
+    adaptation(Fenetre.ligne)
 
 def crayonner(event):
     global Use_crayon
@@ -154,7 +156,7 @@ def crayonner(event):
         Fenetre.crayonclic(event)
         Dessin.actualiser(event.y//cote_PIXEL,event.x//cote_PIXEL,Fenetre.couleur_active)
     progresser()
-
+    
 def crayon():
     Fenetre.resetselec()
     Dessin.resetselec()
@@ -165,7 +167,7 @@ def crayon():
     Fenetre.bouton_actif(Fenetre.crayon)
     global Clic_crayon
     Clic_crayon=Clic_crayon+1
-
+    adaptation(Fenetre.crayon)
 
 def gommer(event):
     global Use_gomme
@@ -185,6 +187,7 @@ def gomme():
     Fenetre.bouton_actif(Fenetre.gomme)
     global Clic_gomme
     Clic_gomme=Clic_gomme+1
+    adaptation(Fenetre.gomme)
 
 
 def selecer1(event):
@@ -225,6 +228,7 @@ def selec():
     Fenetre.bouton_actif(Fenetre.selec)
     global Clic_selec
     Clic_selec=Clic_selec+1
+    adaptation(Fenetre.selec)
 
 def copier():
     Fenetre.coller.configure(state='normal')
@@ -242,6 +246,7 @@ def copier():
             del (Dessin.copieC[k])
     global Clic_copier
     Clic_copier=Clic_copier+1
+    adaptation(Fenetre.copier)
 
 
 def collerclic(event):
@@ -266,6 +271,7 @@ def coller():
     Fenetre.bouton_actif(Fenetre.coller)
     global Clic_coller
     Clic_coller=Clic_coller+1
+    adaptation(Fenetre.coller)
 
 def suppr():
     if Dessin.y1selec<=Dessin.y2selec:
@@ -289,6 +295,7 @@ def suppr():
     progresser()
     global Clic_suppr
     Clic_suppr=Clic_suppr+1
+    adaptation(Fenetre.suppr)
 
 def progresser():
     prog=0
@@ -306,10 +313,14 @@ def suivanter():
     Fenetre.effacer()
     Dessin.effacer()
     progresser()
+    global Score
     Score=Score+1
 
 def suivant():
-    global Score #cette fonction définit la séquence de modèles de référence : les mod impairs pour la statique, les mod pairs pour l'adaptative
+   #cette fonction définit la séquence de modèles de référence : les mod impairs pour la statique, les mod pairs pour l'adaptative
+    global Clic_suivant
+    Clic_suivant=Clic_suivant+1
+    adaptation(Fenetre.suivant)
     if Adaptative==1:
         if Score==0:
             mod4()
@@ -410,26 +421,92 @@ def Copier_dessin():
             print(str(Dessin.valeur[Dessin.couleur_PIXEL(y,x)]+2)+ ",",end="")
 #J'ai codé les modèles en faisant des appels à la fonction mod ci-dessous avec un copier-coller de ce que la console me donnait grâce à la fonction Copier_dessin après copie des dessins avec le jeu
 
-
 Fenetre=Vue()
 Fenetre.genicones()
 Fenetre.generation() #on génère tout l'interface
 
-Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici pour pouvoir utiliser des fonctions issues du fichier contrôleur     
-Fenetre.gomme.configure(command=gomme)                  
+
+boutons={} #on crée un dictionnaire pour pouvoir associer les boutons à leur variable Clic_bouton, pour pouvoir les classer et proposer les raccourcis en adéquation
+
+def adaptation(bouton):
+    if Adaptative==1:
+        Classement=[Clic_peindre,Clic_ligne,Clic_crayon,Clic_gomme,Clic_selec,Clic_copier,Clic_coller,Clic_suppr,Clic_suivant]
+        Classement.sort() #cette ligne classe les nb d'utilisations de Clic dans la liste Classement par ordre croissant
+        boutons[Fenetre.peindre]=Clic_peindre
+        boutons[Fenetre.ligne]=Clic_ligne
+        boutons[Fenetre.crayon]=Clic_crayon
+        boutons[Fenetre.gomme]=Clic_gomme
+        boutons[Fenetre.selec]=Clic_selec
+        boutons[Fenetre.copier]=Clic_copier
+        boutons[Fenetre.coller]=Clic_coller
+        boutons[Fenetre.suppr]=Clic_suppr
+        boutons[Fenetre.suivant]=Clic_suivant
+ 
+        k=8
+        while (boutons[bouton]<Classement[k]) and (k>4):
+            k=k-1
+        print("avant")
+        for m in Fenetre.raccourcis:
+            if m!=0:
+                print(m['command'])
+        Fenetre.preraccourcis=Fenetre.raccourcis
+        save=[0,0,0,0,0,0,0,0,0]
+        i=0
+        while(i<9) and (Fenetre.raccourcis[i]!=0):
+            save[i]=Fenetre.raccourcis[i]['command']
+            i=i+1
+        boutonsave=[0,0,0,0,0,0,0,0,0]
+        for p in range (len(save)):
+            if (save[p])==(Fenetre.peindre['command']):
+                boutonsave[p]=Fenetre.peindre
+            elif (save[p]==Fenetre.ligne['command']):
+                boutonsave[p]=Fenetre.ligne
+            elif (save[p]==Fenetre.crayon['command']):
+                boutonsave[p]=Fenetre.crayon
+            elif (save[p]==Fenetre.gomme['command']):
+                boutonsave[p]=Fenetre.gomme
+            elif (save[p]==Fenetre.selec['command']):
+                boutonsave[p]=Fenetre.selec
+            elif (save[p]==Fenetre.copier['command']):
+                boutonsave[p]=Fenetre.copier
+            elif (save[p]==Fenetre.coller['command']):
+                boutonsave[p]=Fenetre.coller
+            elif (save[p]==Fenetre.suppr['command']):
+                boutonsave[p]=Fenetre.suppr
+            elif (save[p]==Fenetre.suivant['command']):
+                boutonsave[p]=Fenetre.suivant
+
+        if (k>=5) and (boutonsave[8-k]!=bouton): #grâce à la liste triée je peux voir si le nb de clics de la fonction du bouton cliqué est dans le top 4 (et donc devient un raccourci)
+            for r in range(len(Fenetre.preraccourcis)):
+                if (Fenetre.preraccourcis[r]!=0) and((Fenetre.preraccourcis[r]['command'])==(bouton['command'])): 
+                    print("rekt",r)
+                    Fenetre.preraccourcis[r]=0 #on élimine dans la liste des raccourcis les boutons semblables à celui qui vient d'être cliqué pour ne pas avoir de doublons
+
+            for u in range (8,(8-k),-1):
+                if (Fenetre.preraccourcis[u-1]!=bouton):
+                    Fenetre.preraccourcis[u]=Fenetre.preraccourcis[u-1]
+
+            Fenetre.creer_raccourci(bouton,8-k)
+            Fenetre.update_raccourcis()
+
+def data():
+    print("peindre",Clic_peindre,"ligne",Clic_ligne,"crayon",Clic_crayon,"gomme",Clic_gomme,"selec",Clic_selec,"copier",Clic_copier,"coller",Clic_coller,"suppr",Clic_suppr,"suivant",Clic_suivant)
+        
+
+
 Fenetre.peindre.configure(command=peindre)
 Fenetre.ligne.configure(command=ligne)
+Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici pour pouvoir utiliser des fonctions issues du fichier contrôleur     
+Fenetre.gomme.configure(command=gomme)                  
 Fenetre.selec.configure(command=selec)
 Fenetre.copier.configure(command=copier)
 Fenetre.coller.configure(command=coller)
 Fenetre.suppr.configure(command=suppr)
 Fenetre.suivant.configure(command=suivant)
 
+
 Reference=Modele()
 Dessin=Modele() #on génère les deux modèles : celui correspondant à la référence (parfois appelé modèle -de dessin- également) et le modèle du dessin, mis à jour par l'utilisateur et son crayon virtuel
-
-Fenetre.creer_raccourci(Fenetre.crayon,2)
-
 
 def PIX(l,c,codecouleur):
     coul=Dessin.inv_valeur[codecouleur]
@@ -798,6 +875,7 @@ if Adaptative==1:
     mod2()
 elif Adaptative==0:
     mod1()
+
 
 Fenetre.loop() #permet de faire tourner la fenêtre, doit être à la fin
 
