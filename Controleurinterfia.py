@@ -11,11 +11,9 @@ Clic_peindre=0 #le nombre de clics pour chaque bouton
 Clic_ligne=0
 Clic_crayon=0
 Clic_gomme=0
-Clic_annuler=0
 Clic_selec=0
 Clic_copier=0
 Clic_coller=0
-Clic_rotat=0
 Clic_suppr=0
 
 Use_peindre=0 #le nombre d'utilisations des fonctions qui modifient le clic
@@ -42,7 +40,7 @@ def peindre_recursif(li,co,couleur,A):
         Fenetre.colorier_PIXEL(li,co,Fenetre.couleur_active)
         Dessin.actualiser(li,co,Fenetre.couleur_active)
         marque(li,co,A)
-        
+
         l=li
         c=co
         bas=li+1
@@ -77,7 +75,7 @@ def peindreclic(event):
             B.append(0)
             A[y].append(B[x])
     peindre_recursif(l,c,coul,A)
-    progresser()
+    progresser() #à chaque modification de pixels de l'utilisateur, on met à jour le score de progression affiché
 
 def peindre():
     Fenetre.resetselec()
@@ -89,7 +87,6 @@ def peindre():
     Fenetre.bouton_actif(Fenetre.peindre)
     global Clic_peindre
     Clic_peindre=Clic_peindre+1
-
 
 def ligner1(event):
     Fenetre.ligneclic1(event)
@@ -270,19 +267,6 @@ def coller():
     global Clic_coller
     Clic_coller=Clic_coller+1
 
-    
-def getclic(event):
-    l=event.y//cote_PIXEL
-    c=event.x//cote_PIXEL
-    Dessin.prntcouleur_PIXEL(l,c)
-
-def printPIXEL(): #Getclic, printPIXEL et prntcouleur_PIXEL sont 3 fonctions temporaires pour vérifier la correspondance entre canvas et modèle
-    Fenetre.dessin.unbind("<B1-Motion>")
-    Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.dessin.bind("<Button-1>",getclic)
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.rotat)
-
 def suppr():
     if Dessin.y1selec<=Dessin.y2selec:
         sensy=1
@@ -315,49 +299,44 @@ def progresser():
     Fenetre.score.configure(text="Progression : " + str(int(prog)) + "%")
     return (prog)
 
-def Copierdess():
-    for y in range (hauteur//cote_PIXEL):
-        for x in range (largeur//cote_PIXEL):
-            print(str(Dessin.valeur[Dessin.couleur_PIXEL(y,x)])+ ",",end="")
 
 Fenetre=Vue()
 Fenetre.genicones()
 Fenetre.generation() #on génère tout l'interface
 
-Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici
-Fenetre.gomme.configure(command=gomme)  #pour pouvoir utiliser des fonctions issues du fichier contrôleur                     
+Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici pour pouvoir utiliser des fonctions issues du fichier contrôleur     
+Fenetre.gomme.configure(command=gomme)                  
 Fenetre.peindre.configure(command=peindre)
 Fenetre.ligne.configure(command=ligne)
 Fenetre.selec.configure(command=selec)
 Fenetre.copier.configure(command=copier)
 Fenetre.coller.configure(command=coller)
 Fenetre.suppr.configure(command=suppr)
-Fenetre.rotat.configure(command=printPIXEL) #temporaire, pour tester la correspondance canvas/modèle
-Fenetre.annuler.configure(command=Copierdess)
+#Fenetre.suivant.configure(command=suivant)
 
 Reference=Modele()
-Dessin=Modele()
-
+Dessin=Modele() #on génère les deux modèles : celui correspondant à la référence (parfois appelé modèle -de dessin- également) et le modèle du dessin, mis à jour par l'utilisateur et son crayon virtuel
 
 Fenetre.creer_raccourci(Fenetre.crayon,2)
 
+def Copier_dessin():
+    for y in range (hauteur//cote_PIXEL):
+        for x in range (largeur//cote_PIXEL):
+            print(str(Dessin.valeur[Dessin.couleur_PIXEL(y,x)])+ ",",end="")
 
+#J'ai codé les modèles en faisant des appels à la fonction mod ci-dessous avec un copier-coller de ce que la console me donnait grâce à la fonction Copier_dessin après copie des dessins avec le jeu
 
-#Je n'ai pas trouvé de meilleure solution que coder les séquences de modèles pixel par pixel
 def PIX(l,c,codecouleur):
     coul=Dessin.inv_valeur[codecouleur]
     Fenetre.colorier_PIXEL_modele(l,c,coul)
     Reference.actualiser(l,c,coul)
 
-#ça aurait pu prendre beaucoup de lignes en format des lignes d'appels de fonction mais ça aurait été encore plus pénible à remplir
-#p0 représente le pixel en haut à gauche de l'écran, p1 est celui à sa droite, p11 est sur la colonne 0 ligne 1, etc....
-
 def mod(p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,p21,p22,p23,p24,p25,p26,p27,p28,p29,p30,p31,p32,p33,p34,p35,p36,p37,p38,p39,p40,p41,p42,p43,p44,p45,p46,p47,p48,p49,p50
         ,p51,p52,p53,p54,p55,p56,p57,p58,p59,p60,p61,p62,p63,p64,p65,p66,p67,p68,p69,p70,p71,p72,p73,p74,p75,p76,p77,p78,p79,p80,p81,p82,p83,p84,p85,p86,p87,p88,p891,p892,p90,p91,p92,p93,p94,p95,p96,p97,p98,p99,p100,
         p101,p102,p103,p104,p105,p106,p107,p108,p109,p110,p111,p112,p113,p114,p115,p116,p117,p118,p119,p120,p121,p122,p123,p124,p125,p126,p127,p128,p129,p130,p131,p132,p133,p134,p135,p136,p137,p138,p139,p140,
         p141,p142,p143,p144,p145,p146,p147,p148,p149,p150,p151,p152,p153,p154,p155,p156,p157,p158,p159,p160,p161,p162,p163,p164,p165,p166,p167,p168,p169,p170,p171,p172,p173,p174,p175,p176,p177,p178,p179):
-    PIX(0,0,p1 )
-    PIX(0,1,p2 )
+    PIX(0,0,p1 ) #p1 représente le pixel en haut à gauche de l'écran, p1 est celui à sa droite, p11 est sur la colonne 0 ligne 1, etc.... p0 est inutile mais je m'en suis rendu compte trop tard, l'enlever aurait demandé à refaire les premiers modèles
+    PIX(0,1,p2 ) #ça aurait pu prendre beaucoup moins de lignes en format des lignes d'appels de fonction mais ça aurait été encore plus pénible à remplir
     PIX(0,2,p3 )
     PIX(0,3,p4 )
     PIX(0,4,p5 )
@@ -537,6 +516,7 @@ def mod(p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p2
     PIX(17,8,p178)
     PIX(17,9,p179)
 
+#le code des 30 modèles, PIXEL par PIXEL avec le code couleur défini au début du modèle
 def mod1():
     mod(2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
     1,2,2,2,2,2,2,2,1,2,1,2,2,2,2,2,2,2,
@@ -700,7 +680,7 @@ def mod30():
 
 mod30()
 
-Fenetre.loop()
+Fenetre.loop() #permet de faire tourner la fenêtre, doit être à la fin
 
 
 

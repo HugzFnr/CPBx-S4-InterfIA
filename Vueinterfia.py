@@ -90,23 +90,20 @@ class Vue():
         self.gomme=Button(self.fenetre, image=self.gommeIMG)
         self.gomme.grid(row=0, column=18, rowspan=6, columnspan=6)
 
-        self.annuler=Button(self.fenetre, image=self.ctrlzIMG)
-        self.annuler.grid(row=0, column=24, rowspan=6, columnspan=6)
-
         self.selec=Button(self.fenetre, image=self.selecIMG)
-        self.selec.grid(row=0, column=30, rowspan=6, columnspan=6)
+        self.selec.grid(row=0, column=24, rowspan=6, columnspan=6)
 
         self.copier=Button(self.fenetre, image=self.ctrlcIMG,state='disabled') #ces boutons sont désactivés et grisés par défaut, ils auront besoin d'une sélection ou d'un copier
-        self.copier.grid(row=0, column=36, rowspan=6, columnspan=6)
+        self.copier.grid(row=0, column=30, rowspan=6, columnspan=6)
 
         self.coller=Button(self.fenetre, image=self.ctrlvIMG,state='disabled')
-        self.coller.grid(row=0, column=42, rowspan=6, columnspan=6)
-
-        self.rotat=Button(self.fenetre, image=self.rotatIMG,state='disabled')
-        self.rotat.grid(row=0, column=48, rowspan=6, columnspan=6)
+        self.coller.grid(row=0, column=36, rowspan=6, columnspan=6)
 
         self.suppr=Button(self.fenetre, image=self.supprIMG,state='disabled')
-        self.suppr.grid(row=0, column=48, rowspan=6, columnspan=6)
+        self.suppr.grid(row=0, column=42, rowspan=6, columnspan=6)
+
+        self.suivant=Button(self.fenetre, image=self.ctrlzIMG,state='disabled')
+        self.suivant.grid(row=0, column=48, rowspan=6, columnspan=6)
 
         self.progress=IntVar()
         self.score=Message(self.fenetre,aspect=500,bg='gold',justify='center',relief='sunken')
@@ -158,8 +155,8 @@ class Vue():
         self.desactiver_palette()
         self.bouton_actif(self.noir)
 
-    def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 5 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 4 pour le dernier
-        self.raccourcis=[0,0,0,0,0] #ils sont stockés dans une liste et indexés par leur emplacement
+    def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 4 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 4 pour le dernier
+        self.raccourcis=[0,0,0,0] #ils sont stockés dans une liste et indexés par leur emplacement
         self.raccourcis[emplacement]=self.raccourci=Button(self.fenetre,image=bouton['image'])
         self.raccourcis[emplacement].configure(command=bouton['command'])
         self.raccourcis[emplacement].grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
@@ -175,12 +172,9 @@ class Vue():
         self.bouton_inactif(self.ligne)
         self.bouton_inactif(self.crayon)
         self.bouton_inactif(self.gomme)
-        self.bouton_inactif(self.annuler)
         self.bouton_inactif(self.selec)
-        self.bouton_inactif(self.copier)
-        self.bouton_inactif(self.coller)
-        self.bouton_inactif(self.rotat)
-        self.bouton_inactif(self.suppr) #ces trois fonctions permettent de visualiser quel bouton est actif
+        self.bouton_inactif(self.coller) 
+#ces trois fonctions permettent de visualiser quel bouton est actif en le mettant en relief et en enlevant le relief des autres
 
     def desactiver_palette(self):
         self.bouton_inactif(self.rouge)
@@ -202,8 +196,8 @@ class Vue():
             self.c1=event.x//cote_PIXEL
 
     def crayonclic(self,event): 
-        l=event.y//cote_PIXEL #retourne les cordonnées du PIXEL (ligne,colonne) surlequel la souris est
-        c=event.x//cote_PIXEL
+        l=event.y//cote_PIXEL 
+        c=event.x//cote_PIXEL #retourne les cordonnées du PIXEL (l,c)=(ligne,colonne) surlequel la souris est
         self.colorier_PIXEL(l,c,self.couleur_active)
 
     def gommeclic(self,event):
@@ -233,13 +227,11 @@ class Vue():
                 deltay2=0 #on compense pour que la sélection prenne une zone équivalente peu importe les 2 directions (haut vers bas, gauche vers droite,etc...)
             self.selection=self.dessin.create_rectangle((self.c1+deltax1)*cote_PIXEL,(self.l1+deltay1)*cote_PIXEL,(c+deltax2)*cote_PIXEL,(l+deltay2)*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
             self.copier.configure(state='normal')
-            self.rotat.configure(state='normal')
             self.suppr.configure(state='normal')
                  
     def resetselec(self):
             self.dessin.delete(self.selection)
             self.copier.configure(state='disabled')
-            self.rotat.configure(state='disabled')
             self.suppr.configure(state='disabled')
 
     
