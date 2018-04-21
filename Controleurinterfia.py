@@ -1,6 +1,8 @@
 #Contrôleur interfia
 from tkinter import *
+import time
 import copy
+
 
 from Vueinterfia import *
 from Modeleinterfia import *
@@ -29,7 +31,7 @@ Score=0 #1 point pour chaque dessin + le pourcentage de progression du dernier d
 # en -er (gommer,peindrer -désolé langue française-) qui appellent les fonctions de type boutonclic
 # tout cela pour pouvoir assigner aux boutons des fonctions qui ne prennent pas de paramètre event,
 # comme un clic de souris par exemple, en argument; et pour pouvoir actualiser le modèle
-
+#enfin un peu près
 #les fonctions associés aux boutons sont écrits dans l'ordre de l'interface en lecture de gauche à droite
 
 def marque(ligne,colonne,A): #utile pour que la fonction peindre_recursif ne revienne pas sur des pixels déjà traités
@@ -231,7 +233,7 @@ def selec():
     adaptation(Fenetre.selec)
 
 def copier():
-    Fenetre.coller.configure(state='normal')
+    Fenetre.coller.configure(state='normal')   
     Dessin.copieC.clear()
     Dessin.copieL.clear()
 
@@ -306,8 +308,12 @@ def progresser():
     Fenetre.score.configure(text="Progression : " + str(int(prog)) + "%")
     if int(prog)==100:
         Fenetre.suivant.configure(state='normal')
+        if Fenetre.suivracc>=0:
+            Fenetre.raccourcis[Fenetre.suivracc].configure(state='normal')
     else:
         Fenetre.suivant.configure(state='disabled')
+        if Fenetre.suivracc>=0:
+            Fenetre.raccourcis[Fenetre.suivracc].configure(state='disabled')
 
 def suivanter():
     Fenetre.effacer()
@@ -425,9 +431,7 @@ Fenetre=Vue()
 Fenetre.genicones()
 Fenetre.generation() #on génère tout l'interface
 
-
 boutons={} #on crée un dictionnaire pour pouvoir associer les boutons à leur variable Clic_bouton, pour pouvoir les classer et proposer les raccourcis en adéquation
-
 def adaptation(bouton):
     if Adaptative==1:
         Classement=[Clic_peindre,Clic_ligne,Clic_crayon,Clic_gomme,Clic_selec,Clic_copier,Clic_coller,Clic_suppr,Clic_suivant]
@@ -445,10 +449,7 @@ def adaptation(bouton):
         k=8
         while (boutons[bouton]<Classement[k]) and (k>4):
             k=k-1
-        print("avant")
-        for m in Fenetre.raccourcis:
-            if m!=0:
-                print(m['command'])
+
         Fenetre.preraccourcis=Fenetre.raccourcis
         save=[0,0,0,0,0,0,0,0,0]
         i=0
@@ -479,7 +480,6 @@ def adaptation(bouton):
         if (k>=5) and (boutonsave[8-k]!=bouton): #grâce à la liste triée je peux voir si le nb de clics de la fonction du bouton cliqué est dans le top 4 (et donc devient un raccourci)
             for r in range(len(Fenetre.preraccourcis)):
                 if (Fenetre.preraccourcis[r]!=0) and((Fenetre.preraccourcis[r]['command'])==(bouton['command'])): 
-                    print("rekt",r)
                     Fenetre.preraccourcis[r]=0 #on élimine dans la liste des raccourcis les boutons semblables à celui qui vient d'être cliqué pour ne pas avoir de doublons
 
             for u in range (8,(8-k),-1):
@@ -492,8 +492,6 @@ def adaptation(bouton):
 def data():
     print("peindre",Clic_peindre,"ligne",Clic_ligne,"crayon",Clic_crayon,"gomme",Clic_gomme,"selec",Clic_selec,"copier",Clic_copier,"coller",Clic_coller,"suppr",Clic_suppr,"suivant",Clic_suivant)
         
-
-
 Fenetre.peindre.configure(command=peindre)
 Fenetre.ligne.configure(command=ligne)
 Fenetre.crayon.configure(command=crayon) #on assigne les commandes aux boutons ici pour pouvoir utiliser des fonctions issues du fichier contrôleur     
@@ -503,7 +501,6 @@ Fenetre.copier.configure(command=copier)
 Fenetre.coller.configure(command=coller)
 Fenetre.suppr.configure(command=suppr)
 Fenetre.suivant.configure(command=suivant)
-
 
 Reference=Modele()
 Dessin=Modele() #on génère les deux modèles : celui correspondant à la référence (parfois appelé modèle -de dessin- également) et le modèle du dessin, mis à jour par l'utilisateur et son crayon virtuel
@@ -875,8 +872,7 @@ if Adaptative==1:
     mod2()
 elif Adaptative==0:
     mod1()
-
-
+    
 Fenetre.loop() #permet de faire tourner la fenêtre, doit être à la fin
 
 

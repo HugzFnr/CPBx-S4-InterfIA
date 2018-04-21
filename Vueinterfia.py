@@ -1,6 +1,7 @@
 ﻿#Vue interfia
 
 from tkinter import *
+import time
 from Parametresinterfia import *
 
 class Vue():
@@ -13,6 +14,14 @@ class Vue():
         
         self.raccourcis=[0,0,0,0,0,0,0,0,0]
         self.preraccourcis=[0,0,0,0,0,0,0,0,0]
+        self.suivracc=-1
+        self.copierracc=-1
+        self.supprracc=-1 #marque quand certaines fonctions sont en raccourcis pour pouvour mettre à jour leur état désactivé ou activé
+
+        self.horloge()
+
+    def horloge(self):
+        self.fenetre.after(Timer,self.fenetre.destroy)
 
     def loop(self):
         self.fenetre.mainloop()
@@ -159,6 +168,19 @@ class Vue():
 
     def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 4 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 3 pour le dernier
         #ils sont stockés dans une liste et indexés par leur emplacement
+        if emplacement==self.suivracc:
+            self.suivracc=-1
+        elif emplacement==self.copierracc:
+            self.copierracc=-1
+        elif emplacement==self.supprracc:
+            self.supprracc=-1
+        if bouton['command']==self.suivant['command']:
+            self.suivracc=emplacement
+        elif bouton['command']==self.copier['command']:
+            self.copierracc=emplacement
+        elif bouton['command']==self.suppr['command']:
+            self.supprracc=emplacement
+        
         self.raccourcis[emplacement]=Button(self.fenetre,image=bouton['image'])
         self.raccourcis[emplacement].configure(command=bouton['command'],state=bouton['state'])
         self.raccourcis[emplacement].grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
@@ -250,11 +272,20 @@ class Vue():
             self.selection=self.dessin.create_rectangle((self.c1+deltax1)*cote_PIXEL,(self.l1+deltay1)*cote_PIXEL,(c+deltax2)*cote_PIXEL,(l+deltay2)*cote_PIXEL,width=3,outline='darkblue',dash=(20,20))
             self.copier.configure(state='normal')
             self.suppr.configure(state='normal')
+            if self.copierracc>=0:
+                self.raccourcis[self.copierracc].configure(state='normal')
+            if self.supprracc>=0:
+                self.raccourcis[self.supprracc].configure(state='normal')
+
                  
     def resetselec(self):
             self.dessin.delete(self.selection)
             self.copier.configure(state='disabled')
             self.suppr.configure(state='disabled')
+            if self.copierracc>=0:
+                self.raccourcis[self.copierracc].configure(state='disabled')
+            if self.supprracc>=0:
+                self.raccourcis[self.supprracc].configure(state='disabled')
 
     
         
