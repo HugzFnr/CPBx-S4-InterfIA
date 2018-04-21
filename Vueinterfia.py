@@ -106,7 +106,7 @@ class Vue():
         self.suivant.grid(row=0, column=48, rowspan=6, columnspan=6)
 
         self.progress=IntVar()
-        self.score=Message(self.fenetre,aspect=500,bg='gold',justify='center',relief='sunken')
+        self.score=Message(self.fenetre,aspect=500,bg='goldenrod',justify='center',relief='sunken')
         self.score.grid(row=0, column=54,rowspan=6,columnspan=15)
 
         
@@ -189,6 +189,11 @@ class Vue():
 
     def colorier_PIXEL_modele(self,l,c,couleur):
         self.reference.itemconfigure(self.C1[l][c],fill=couleur)
+
+    def effacer(self):
+        for y in range (hauteur//cote_PIXEL):
+            for x in range (largeur//cote_PIXEL):
+                self.colorier_PIXEL(y,x,'white')
     
     def ligneclic1(self,event):
         if event.x<largeur and event.y<hauteur:

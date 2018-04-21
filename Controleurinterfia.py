@@ -297,7 +297,118 @@ def progresser():
             if Dessin.couleur_PIXEL(y,x)==Reference.couleur_PIXEL(y,x):
                 prog=prog+(5/9)
     Fenetre.score.configure(text="Progression : " + str(int(prog)) + "%")
-    return (prog)
+    if int(prog)==100:
+        Fenetre.suivant.configure(state='normal')
+    else:
+        Fenetre.suivant.configure(state='disabled')
+
+def suivanter():
+    Fenetre.effacer()
+    Dessin.effacer()
+    progresser()
+    Score=Score+1
+
+def suivant():
+    global Score #cette fonction définit la séquence de modèles de référence : les mod impairs pour la statique, les mod pairs pour l'adaptative
+    if Adaptative==1:
+        if Score==0:
+            mod4()
+            suivanter()
+        elif Score==1:
+            mod6()
+            suivanter()
+        elif Score==2:
+            mod8()
+            suivanter()
+        elif Score==3:
+            mod10()
+            suivanter()
+        elif Score==4:
+            mod12()
+            suivanter()
+        elif Score==5:
+            mod14()
+            suivanter()
+        elif Score==6:
+            mod16()
+            suivanter()
+        elif Score==7:
+            mod18()
+            suivanter()
+        elif Score==8:
+            mod20()
+            suivanter()
+        elif Score==9:
+            mod22()
+            suivanter()
+        elif Score==10:
+            mod24()
+            suivanter()
+        elif Score==11:
+            mod26()
+            suivanter()
+        elif Score==12:
+            mod28()
+            suivanter()
+        elif Score==13:
+            mod30()
+            suivanter()
+        elif Score==14:
+            fin()
+            suivanter()
+ 
+    elif Adaptative==0:
+        if Score==0:
+            mod3()
+            suivanter()
+        elif Score==1:
+            mod5()
+            suivanter()
+        elif Score==2:
+            mod7()
+            suivanter()
+        elif Score==3:
+            mod9()
+            suivanter()
+        elif Score==4:
+            mod11()
+            suivanter()
+        elif Score==5:
+            mod13()
+            suivanter()
+        elif Score==6:
+            mod15()
+            suivanter()
+        elif Score==7:
+            mod17()
+            suivanter()
+        elif Score==8:
+            mod19()
+            suivanter()
+        elif Score==9:
+            mod21()
+            suivanter()
+        elif Score==10:
+            mod23()
+            suivanter()
+        elif Score==11:
+            mod25()
+            suivanter()
+        elif Score==12:
+            mod27()
+            suivanter()
+        elif Score==13:
+            mod29()
+            suivanter()
+        elif Score==14:
+            fin()
+            suivanter()
+
+def Copier_dessin():
+    for y in range (hauteur//cote_PIXEL):
+        for x in range (largeur//cote_PIXEL):
+            print(str(Dessin.valeur[Dessin.couleur_PIXEL(y,x)]+2)+ ",",end="")
+#J'ai codé les modèles en faisant des appels à la fonction mod ci-dessous avec un copier-coller de ce que la console me donnait grâce à la fonction Copier_dessin après copie des dessins avec le jeu
 
 
 Fenetre=Vue()
@@ -312,19 +423,13 @@ Fenetre.selec.configure(command=selec)
 Fenetre.copier.configure(command=copier)
 Fenetre.coller.configure(command=coller)
 Fenetre.suppr.configure(command=suppr)
-#Fenetre.suivant.configure(command=suivant)
+Fenetre.suivant.configure(command=suivant)
 
 Reference=Modele()
 Dessin=Modele() #on génère les deux modèles : celui correspondant à la référence (parfois appelé modèle -de dessin- également) et le modèle du dessin, mis à jour par l'utilisateur et son crayon virtuel
 
 Fenetre.creer_raccourci(Fenetre.crayon,2)
 
-def Copier_dessin():
-    for y in range (hauteur//cote_PIXEL):
-        for x in range (largeur//cote_PIXEL):
-            print(str(Dessin.valeur[Dessin.couleur_PIXEL(y,x)])+ ",",end="")
-
-#J'ai codé les modèles en faisant des appels à la fonction mod ci-dessous avec un copier-coller de ce que la console me donnait grâce à la fonction Copier_dessin après copie des dessins avec le jeu
 
 def PIX(l,c,codecouleur):
     coul=Dessin.inv_valeur[codecouleur]
@@ -517,6 +622,17 @@ def mod(p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,p17,p18,p19,p2
     PIX(17,9,p179)
 
 #le code des 30 modèles, PIXEL par PIXEL avec le code couleur défini au début du modèle
+def exemple():
+    mod(99,3,4,4,3,4,4,4,4,4,4,4,3,3,4,4,4,4,4,4,4,4,3,3,4,4,4,4,4,4,4,3,4,4,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+        4,5,5,5,5,4,5,5,5,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,
+        2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,4,5,2,2,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1)
+
+def fin():
+    mod(99,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+        6,6,6,6,6,6,6,6,6,6,6,5,5,6,6,6,6,6,6,6,6,5,6,6,5,6,5,6,6,5,6,5,5,6,6,6,5,5,6,5,6,5,6,6,5,6,5,6,5,5,6,5,
+        6,6,5,6,5,6,6,5,6,6,6,6,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,
+        6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6)
 def mod1():
     mod(2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
     1,2,2,2,2,2,2,2,1,2,1,2,2,2,2,2,2,2,
@@ -678,7 +794,10 @@ def mod30():
         5,5,3,3,3,3,5,5,2,5,5,3,3,3,3,3,3,5,5,5,5,3,3,5,5,3,3,5,5,1,5,5,5,5,5,5,5,5,0,1,1,5,5,3,3,5,5,0,0,1,3,3,0,3,3,1,3,3,0,3,3,0,
         3,3,3,3,1,3,3,3,0,0,3,2,2,3,1,1,3,3,0,0,3,2,2,3,1,1,3,0,0,3,3,2,2,3,3,1,1,0,0,3,2,2,2,2,3,1,1,0,3,3,2,2,2,2,3,3,1)
 
-mod30()
+if Adaptative==1:
+    mod2()
+elif Adaptative==0:
+    mod1()
 
 Fenetre.loop() #permet de faire tourner la fenêtre, doit être à la fin
 

@@ -13,6 +13,7 @@ class Modele():
         self.valeur["yellow2"]=3
         self.valeur["white"]=4
         self.valeur["black"]=5
+        self.valeur["purple3"]=6 #valeur impossible à dessiner pour l'écran de fin
 
         self.inv_valeur={}
         for cle,valeur in self.valeur.items(): #on crée le dictionnaire inverse
@@ -47,6 +48,11 @@ class Modele():
     
     def couleur_PIXEL(self,l,c):
         return self.inv_valeur[self.M[l][c]]
+
+    def effacer(self):
+        for y in range (hauteur//cote_PIXEL):
+            for x in range (largeur//cote_PIXEL):
+                self.actualiser(y,x,'white')
 
     def prntcouleur_PIXEL(self,l,c):
         print(self.inv_valeur[self.M[l][c]],"ligne=",l,"colonne=",c)
