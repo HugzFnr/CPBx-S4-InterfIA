@@ -17,15 +17,19 @@ Clic_selec=0
 Clic_copier=0
 Clic_coller=0
 Clic_suppr=0
-Clic_suivant=0
+Clic_suivant=0 #celui là est présent juste pour détecter si il y a eu peu avoir une faille
 
 Use_peindre=0 #le nombre d'utilisations des fonctions qui modifient le clic
 Use_ligne=0
 Use_crayon=0
 Use_gomme=0
+Use_selec=0
 Use_coller=0
 
+
 Score=0 #1 point pour chaque dessin + le pourcentage de progression du dernier dessin
+Hésitation=0
+hésit=0
 
 #les fonctions avec le nom du bouton (gomme,peindre,...) appellent les fonctions
 # en -er (gommer,peindrer -désolé langue française-) qui appellent les fonctions de type boutonclic
@@ -33,6 +37,40 @@ Score=0 #1 point pour chaque dessin + le pourcentage de progression du dernier d
 # comme un clic de souris par exemple, en argument; et pour pouvoir actualiser le modèle
 #enfin un peu près
 #les fonctions associés aux boutons sont écrits dans l'ordre de l'interface en lecture de gauche à droite
+
+
+def temps_ecoule():
+    Fenetre.fenetre.after(Timer-2000,Data)               #on minute la session de test pour préciser les données
+    Fenetre.fenetre.after(Timer,lafin)
+
+def Data():
+    if Adaptative==1:
+        with open('logstesta.txt','w+') as donnees:
+            donnees.write('données test : ' +'Interface : ' + ' adaptative' + '; '+ 'Score total : ' + str(Score)+','+ str(progresser())
+                      +'; Hésitation : '+str(Hésitation)+'; Clic_peindre :' + str(Clic_peindre)+'; Use_peindre :' + str(Use_peindre)
+                      +'; Clic_ligne :' + str(Clic_ligne)+'; Use_ligne :' + str(Use_ligne)+'; Clic_crayon :' + str(Clic_crayon)
+                      +'; Use_crayon :' + str(Clic_crayon)+'; Clic_gomme :' + str(Clic_gomme)+'; Use_gomme :' + str(Use_gomme)
+                      +'; Clic_selec :' + str(Clic_selec)+'; Use_selec :' + str(Use_selec)+'; Clic_copier :' + str(Clic_copier)
+                      +'; Clic_coller :' + str(Clic_coller)+'; Clic_suppr :' + str(Clic_suppr)
+                      +'; Use_coller :' + str(Use_coller)   +'; Clic_suivant :' + str(Clic_suivant))
+    elif Adaptative==0:
+        with open('logstestb.txt','w+') as donnees:
+            donnees.write('données test : ' +'Interface : ' + ' statique' + '; '+ 'Score total : ' + str(Score)+','+ str(progresser())
+                      +'; Hésitation : '+str(Hésitation)+'; Clic_peindre :' + str(Clic_peindre)+'; Use_peindre :' + str(Use_peindre)
+                      +'; Clic_ligne :' + str(Clic_ligne)+'; Use_ligne :' + str(Use_ligne)+'; Clic_crayon :' + str(Clic_crayon)
+                      +'; Use_crayon :' + str(Clic_crayon)+'; Clic_gomme :' + str(Clic_gomme)+'; Use_gomme :' + str(Use_gomme)
+                      +'; Clic_selec :' + str(Clic_selec)+'; Use_selec :' + str(Use_selec)+'; Clic_copier :' + str(Clic_copier)
+                      +'; Clic_coller :' + str(Clic_coller)+'; Clic_suppr :' + str(Clic_suppr)
+                      +'; Use_coller :' + str(Use_coller)   +'; Clic_suivant :' + str(Clic_suivant))
+
+
+def lafin():
+  Fenetre.fenetre.destroy()
+
+def hesiter():
+    if hésit==1:
+        global Hésitation
+        Hésitation=Hésitation+1
 
 def marque(ligne,colonne,A): #utile pour que la fonction peindre_recursif ne revienne pas sur des pixels déjà traités
     A[ligne][colonne]=1
@@ -67,6 +105,8 @@ def peindre_recursif(li,co,couleur,A):
 def peindreclic(event):
     global Use_peindre
     Use_peindre=Use_peindre+1
+    global hésit
+    hésit=0
     l=event.y//cote_PIXEL
     c=event.x//cote_PIXEL
     coul=Dessin.couleur_PIXEL(l,c)
@@ -81,6 +121,9 @@ def peindreclic(event):
     progresser() #à chaque modification de pixels de l'utilisateur, on met à jour le score de progression affiché
 
 def peindre():
+    hesiter()
+    global hésit
+    hésit=1
     Fenetre.resetselec()
     Dessin.resetselec()
     Fenetre.dessin.bind("<Button-1>",peindreclic)
@@ -98,6 +141,8 @@ def ligner1(event):
 def ligner2(event):
     global Use_ligne
     Use_ligne=Use_ligne+1
+    global hésit    
+    hésit=0
     if event.x<=largeur and event.y<=hauteur: #garde-fou de non sortie du canvas
         l2=event.y//cote_PIXEL
         c2=event.x//cote_PIXEL
@@ -140,6 +185,9 @@ def ligner2(event):
                     
 
 def ligne():
+    hesiter()
+    global hésit
+    hésit=1
     Fenetre.resetselec()
     Dessin.resetselec()
     Fenetre.dessin.bind("<Button-1>",ligner1)
@@ -152,6 +200,8 @@ def ligne():
     adaptation(Fenetre.ligne)
 
 def crayonner(event):
+    global hésit
+    hésit=0
     global Use_crayon
     Use_crayon=Use_crayon+1
     if event.x<largeur and event.y<hauteur: 
@@ -160,6 +210,9 @@ def crayonner(event):
     progresser()
     
 def crayon():
+    hesiter()
+    global hésit
+    hésit=1
     Fenetre.resetselec()
     Dessin.resetselec()
     Fenetre.dessin.bind("<Button-1>",crayonner)
@@ -172,6 +225,8 @@ def crayon():
     adaptation(Fenetre.crayon)
 
 def gommer(event):
+    global hésit
+    hésit=0
     global Use_gomme
     Use_gomme=Use_gomme+1
     if event.x<largeur and event.y<hauteur:
@@ -180,6 +235,9 @@ def gommer(event):
     progresser()
 
 def gomme():
+    hesiter()
+    global hésit
+    hésit=1
     Fenetre.resetselec()
     Dessin.resetselec()
     Fenetre.dessin.bind("<Button-1>",gommer)
@@ -198,6 +256,10 @@ def selecer1(event):
     Fenetre.selecclic1(event)
 
 def selecer2(event):
+    global hésit
+    hésit=0
+    global Use_selec
+    Use_selec=Use_selec+1
     if event.x<=largeur and event.y<=hauteur:
         l2=event.y//cote_PIXEL
         c2=event.x//cote_PIXEL
@@ -223,6 +285,9 @@ def selecer2(event):
     Fenetre.selecclic2(event)
                 
 def selec():
+    hesiter()
+    global hésit
+    hésit=1
     Fenetre.dessin.bind("<Button-1>",selecer1)
     Fenetre.dessin.bind("<B1-ButtonRelease>",selecer2)
     Fenetre.dessin.unbind("<B1-Motion>")
@@ -233,6 +298,7 @@ def selec():
     adaptation(Fenetre.selec)
 
 def copier():
+    hesiter()
     Fenetre.coller.configure(state='normal')   
     Dessin.copieC.clear()
     Dessin.copieL.clear()
@@ -252,6 +318,8 @@ def copier():
 
 
 def collerclic(event):
+    global hésit
+    hésit=0
     h=event.y//cote_PIXEL
     l=event.x//cote_PIXEL
     for y in range (h,h+len(Dessin.copieC)):
@@ -264,6 +332,9 @@ def collerclic(event):
     Use_coller=Use_coller+1
 
 def coller():
+    hesiter()
+    global hésit
+    hésit=1
     Fenetre.resetselec()
     Dessin.resetselec()
     Fenetre.dessin.bind("<Button-1>",collerclic)
@@ -276,6 +347,7 @@ def coller():
     adaptation(Fenetre.coller)
 
 def suppr():
+    hesiter()
     if Dessin.y1selec<=Dessin.y2selec:
         sensy=1
         deltay=1
@@ -314,6 +386,7 @@ def progresser():
         Fenetre.suivant.configure(state='disabled')
         if Fenetre.suivracc>=0:
             Fenetre.raccourcis[Fenetre.suivracc].configure(state='disabled')
+    return(prog)
 
 def suivanter():
     Fenetre.effacer()
@@ -321,6 +394,8 @@ def suivanter():
     progresser()
     global Score
     Score=Score+1
+    Fenetre.scoretot.configure(text="Score:"+ str(Score))
+
 
 def suivant():
    #cette fonction définit la séquence de modèles de référence : les mod impairs pour la statique, les mod pairs pour l'adaptative
@@ -872,7 +947,9 @@ if Adaptative==1:
     mod2()
 elif Adaptative==0:
     mod1()
-    
+#exemple() à activer pour la démo pré-test
+
+temps_ecoule()
 Fenetre.loop() #permet de faire tourner la fenêtre, doit être à la fin
 
 

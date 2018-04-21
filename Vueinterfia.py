@@ -21,12 +21,22 @@ class Vue():
         self.horloge()
 
     def horloge(self):
-        self.fenetre.after(Timer,self.fenetre.destroy)
-
+ 
+        self.fenetre.after(1000,self.tictac)
+    
     def loop(self):
         self.fenetre.mainloop()
 
-    def genicones(self): #on stocke les icônes adéquates dans des variables utilisables en s'adaptant à l'une des deux échelles prévues définies dans le fichier de paramètres
+    def tictac(self):
+        self.time=self.time+1
+        self.temps.set("Temps restant:" + str((Timer/(1000)-self.time)//60)+ "min")
+        self.horloge()
+        
+    def genicones(self):
+        
+        self.temps=StringVar()
+        self.time=0
+        #on stocke les icônes adéquates dans des variables utilisables en s'adaptant à l'une des deux échelles prévues définies dans le fichier de paramètres
         if echelle == 1:
             self.peindreIMG = PhotoImage(file="peindreIMG1.gif") #Icône 64x64 à l'échelle 1 et 100x100 echelle 1.6
             self.ligneIMG = PhotoImage(file="ligneIMG1.gif")
@@ -116,10 +126,15 @@ class Vue():
         self.suivant=Button(self.fenetre, image=self.ctrlzIMG,state='disabled')
         self.suivant.grid(row=0, column=48, rowspan=6, columnspan=6)
 
-        self.progress=IntVar()
-        self.score=Message(self.fenetre,aspect=500,bg='goldenrod',justify='center',relief='sunken')
-        self.score.grid(row=0, column=54,rowspan=6,columnspan=15)
 
+        self.score=Message(self.fenetre,aspect=500,bg='goldenrod',justify='center',relief='sunken')
+        self.score.grid(row=0, column=54,rowspan=3,columnspan=9)
+
+        self.timer=Message(self.fenetre,aspect=500,bg='goldenrod',justify='center',relief='sunken',textvariable=((self.temps)))
+        self.timer.grid(row=3,column=54,rowspan=3,columnspan=9)        
+
+        self.scoretot=Message(self.fenetre,aspect=150,bg='purple1',justify='center',relief='sunken')
+        self.scoretot.grid(row=0,column=63,rowspan=6,columnspan=4)
         
         #Boutons palette
         self.couleur_active="red2" #la valeur par défaut est rouge
