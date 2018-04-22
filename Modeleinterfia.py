@@ -1,6 +1,4 @@
 #Modèle interfia
-
-from tkinter import *
 from Parametresinterfia import *
 
 class Modele():

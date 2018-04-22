@@ -1,22 +1,28 @@
 ﻿#Vue interfia
-
 from tkinter import *
 import time
+
 from Parametresinterfia import *
 
 class Vue():
     def __init__(self):
         self.fenetre=Tk()
-
         self.fenetre.title("Interfia")
 
         self.progress=StringVar()
         
         self.raccourcis=[0,0,0,0,0,0,0,0,0]
         self.preraccourcis=[0,0,0,0,0,0,0,0,0]
-        self.suivracc=-1
+
+        self.peindreracc=-1
+        self.ligneracc=-1
+        self.crayonracc=-1
+        self.gommeracc=-1
+        self.selecracc=-1
+        self.collerracc=-1
         self.copierracc=-1
-        self.supprracc=-1 #marque quand certaines fonctions sont en raccourcis pour pouvour mettre à jour leur état désactivé ou activé
+        self.supprracc=-1
+        self.suivracc=-1     #marque où sont les fonctions sont en raccourcis pour pouvour mettre à jour leur état désactivé ou activé
 
         self.horloge()
 
@@ -99,31 +105,31 @@ class Vue():
 
         self.selection=0    
         #Boutons principaux
-        self.peindre=Button(self.fenetre, image=self.peindreIMG)
+        self.peindre=Button(self.fenetre, image=self.peindreIMG,borderwidth=3)
         self.peindre.grid(row=0, column=0, rowspan=6, columnspan=6)
 
-        self.ligne=Button(self.fenetre, image=self.ligneIMG)
+        self.ligne=Button(self.fenetre, image=self.ligneIMG,borderwidth=3)
         self.ligne.grid(row=0, column=6, rowspan=6, columnspan=6)
 
-        self.crayon=Button(self.fenetre, image=self.crayonIMG)
+        self.crayon=Button(self.fenetre, image=self.crayonIMG,borderwidth=3)
         self.crayon.grid(row=0, column=12, rowspan=6, columnspan=6)
 
-        self.gomme=Button(self.fenetre, image=self.gommeIMG)
+        self.gomme=Button(self.fenetre, image=self.gommeIMG,borderwidth=3)
         self.gomme.grid(row=0, column=18, rowspan=6, columnspan=6)
 
-        self.selec=Button(self.fenetre, image=self.selecIMG)
+        self.selec=Button(self.fenetre, image=self.selecIMG,borderwidth=3)
         self.selec.grid(row=0, column=24, rowspan=6, columnspan=6)
 
-        self.copier=Button(self.fenetre, image=self.ctrlcIMG,state='disabled') #ces boutons sont désactivés et grisés par défaut, ils auront besoin d'une sélection ou d'un copier
+        self.copier=Button(self.fenetre, image=self.ctrlcIMG,state='disabled',borderwidth=3) #ces boutons sont désactivés et grisés par défaut, ils auront besoin d'une sélection ou d'un copier
         self.copier.grid(row=0, column=30, rowspan=6, columnspan=6)
 
-        self.coller=Button(self.fenetre, image=self.ctrlvIMG,state='disabled')
+        self.coller=Button(self.fenetre, image=self.ctrlvIMG,state='disabled',borderwidth=3)
         self.coller.grid(row=0, column=36, rowspan=6, columnspan=6)
 
-        self.suppr=Button(self.fenetre, image=self.supprIMG,state='disabled')
+        self.suppr=Button(self.fenetre, image=self.supprIMG,state='disabled',borderwidth=3)
         self.suppr.grid(row=0, column=42, rowspan=6, columnspan=6)
 
-        self.suivant=Button(self.fenetre, image=self.ctrlzIMG,state='disabled')
+        self.suivant=Button(self.fenetre, image=self.ctrlzIMG,state='disabled',borderwidth=3)
         self.suivant.grid(row=0, column=48, rowspan=6, columnspan=6)
 
 
@@ -138,22 +144,22 @@ class Vue():
         
         #Boutons palette
         self.couleur_active="red2" #la valeur par défaut est rouge
-        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge,relief="sunken")  #donc par défaut, le bouton est de relief appuyé (=sunken)par défaut
+        self.rouge=Button(self.fenetre, image=self.rougeIMG,command=self.rouge,relief="sunken",borderwidth=3,background='magenta4')  #donc par défaut, le bouton est de relief appuyé (=sunken)par défaut
         self.rouge.grid(row=6, column=30, rowspan=3, columnspan=2)
 
-        self.vert=Button(self.fenetre, image=self.vertIMG,command=self.vert)
+        self.vert=Button(self.fenetre, image=self.vertIMG,command=self.vert,borderwidth=3)
         self.vert.grid(row=6, column=32, rowspan=3, columnspan=2)
 
-        self.bleu=Button(self.fenetre, image=self.bleuIMG,command=self.bleu)
+        self.bleu=Button(self.fenetre, image=self.bleuIMG,command=self.bleu,borderwidth=3)
         self.bleu.grid(row=6, column=34, rowspan=3, columnspan=2)
 
-        self.jaune=Button(self.fenetre, image=self.jauneIMG,command=self.jaune)
+        self.jaune=Button(self.fenetre, image=self.jauneIMG,command=self.jaune,borderwidth=3)
         self.jaune.grid(row=9, column=30, rowspan=3, columnspan=2)
 
-        self.blanc=Button(self.fenetre, image=self.blancIMG,command=self.blanc)
+        self.blanc=Button(self.fenetre, image=self.blancIMG,command=self.blanc,borderwidth=3)
         self.blanc.grid(row=9, column=32, rowspan=3, columnspan=2)
 
-        self.noir=Button(self.fenetre, image=self.noirIMG,command=self.noir)
+        self.noir=Button(self.fenetre, image=self.noirIMG,command=self.noir,borderwidth=3)
         self.noir.grid(row=9, column=34, rowspan=3,columnspan=2)
 
     def rouge(self): #les fonctions très simples pour chaque bouton de la palette, qui modifient la valeur de self.couleur_active utilisée pour dessiner
@@ -183,19 +189,44 @@ class Vue():
 
     def creer_raccourci(self,bouton,emplacement): #duplique un bouton dans un des 4 emplacements du milieu : emplacement=0 pour celui en-dessous de la palette, emplacement = 3 pour le dernier
         #ils sont stockés dans une liste et indexés par leur emplacement
-        if emplacement==self.suivracc:
-            self.suivracc=-1
+        if emplacement==self.peindreracc:
+            self.peindreracc=-1
+        elif emplacement==self.ligneracc:
+            self.ligneracc=-1
+        elif emplacement==self.crayonracc:
+            self.crayonracc=-1
+        elif emplacement==self.gommeracc:
+            self.gommeracc=-1
+        elif emplacement==self.selecracc:
+            self.selecracc=-1
         elif emplacement==self.copierracc:
             self.copierracc=-1
+        elif emplacement==self.collerracc:
+            self.collerracc=-1
         elif emplacement==self.supprracc:
             self.supprracc=-1
-        if bouton['command']==self.suivant['command']:
-            self.suivracc=emplacement
+        elif emplacement==self.suivracc:
+            self.suivracc=-1 #si un des Vue.boutonracc vaut -1, c'est que ce bouton n'a pas de raccourci,
+    #c'est important pour ne pas faire d'appel incohérent (ex : changer la couleur d'un bouton non existant)
+        if bouton['command']==self.peindre['command']:
+            self.peindreracc=emplacement
+        elif bouton['command']==self.ligne['command']:
+            self.ligneracc=emplacement
+        elif bouton['command']==self.crayon['command']:
+            self.crayonracc=emplacement
+        elif bouton['command']==self.gomme['command']:
+            self.gommeracc=emplacement
+        elif bouton['command']==self.selec['command']:
+            self.selecracc=emplacement
         elif bouton['command']==self.copier['command']:
             self.copierracc=emplacement
+        elif bouton['command']==self.coller['command']:
+            self.collerracc=emplacement
         elif bouton['command']==self.suppr['command']:
             self.supprracc=emplacement
-        
+        elif bouton['command']==self.suivant['command']: #toutes ces lignes permettent d'identifier quelle est la fonction de chaque raccourci
+            self.suivracc=emplacement #c'est uniquement utile pour mettre à jour l'état visuel (relief+bordure) du bouton et de son raccourci en même temps
+
         self.raccourcis[emplacement]=Button(self.fenetre,image=bouton['image'])
         self.raccourcis[emplacement].configure(command=bouton['command'],state=bouton['state'])
         self.raccourcis[emplacement].grid(column=30, columnspan=6, rowspan=6, row=12+emplacement*6)
@@ -212,14 +243,13 @@ class Vue():
                     self.creer_raccourci(self.preraccourcis[q],p)
                     self.preraccourcis[q]=0
                 elif self.raccourcis[p]!=0:
-                    self.raccourcis[p].destroy()
-                    
+                    self.raccourcis[p].destroy()            
             
     def bouton_actif(self,bouton):
-        bouton.configure(relief="sunken")
+        bouton.configure(relief="sunken",background='blue')
 
     def bouton_inactif(self,bouton): 
-        bouton.configure(relief="raised")
+        bouton.configure(relief="raised",background='grey99')
 
     def desactiver_boutons(self):
         self.bouton_inactif(self.peindre)
@@ -227,7 +257,10 @@ class Vue():
         self.bouton_inactif(self.crayon)
         self.bouton_inactif(self.gomme)
         self.bouton_inactif(self.selec)
-        self.bouton_inactif(self.coller) 
+        self.bouton_inactif(self.coller)
+        for i in range (4):
+            if self.raccourcis[i]!=0:
+                self.bouton_inactif(self.raccourcis[i])
 #ces trois fonctions permettent de visualiser quel bouton est actif en le mettant en relief et en enlevant le relief des autres
 
     def desactiver_palette(self):

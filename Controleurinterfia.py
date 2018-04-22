@@ -1,12 +1,8 @@
 #Contrôleur interfia
-from tkinter import *
-import time
 import copy
-
 
 from Vueinterfia import *
 from Modeleinterfia import *
-from Parametresinterfia import *
 
 #Données qu'on recupère sous forme de logs
 Clic_peindre=0 #le nombre de clics pour chaque bouton
@@ -46,7 +42,12 @@ def temps_ecoule():
 def Data():
     if Adaptative==1:
         with open('logstesta.txt','w+') as donnees:
-            donnees.write('données test : ' +'Interface : ' + ' adaptative' + '; '+ 'Score total : ' + str(Score)+','+ str(progresser())
+            if Sequence==1:
+                seq='impaire'
+            elif Sequence==0:
+                seq='paire'
+            donnees.write('données test : ' +'Interface : ' + ' adaptative' + '; Séquence : ' + seq
+                          + '; '+ 'Score total : ' + str(Score)+','+ str(progresser())
                       +'; Hésitation : '+str(Hésitation)+'; Clic_peindre :' + str(Clic_peindre)+'; Use_peindre :' + str(Use_peindre)
                       +'; Clic_ligne :' + str(Clic_ligne)+'; Use_ligne :' + str(Use_ligne)+'; Clic_crayon :' + str(Clic_crayon)
                       +'; Use_crayon :' + str(Clic_crayon)+'; Clic_gomme :' + str(Clic_gomme)+'; Use_gomme :' + str(Use_gomme)
@@ -55,7 +56,12 @@ def Data():
                       +'; Use_coller :' + str(Use_coller)   +'; Clic_suivant :' + str(Clic_suivant))
     elif Adaptative==0:
         with open('logstestb.txt','w+') as donnees:
-            donnees.write('données test : ' +'Interface : ' + ' statique' + '; '+ 'Score total : ' + str(Score)+','+ str(progresser())
+            if Sequence==1:
+                seq='impaire'
+            elif Sequence==0:
+                seq='paire'
+            donnees.write('données test : ' +'Interface : ' + ' statique' + '; Séquence : ' + seq
+                        + '; '+ 'Score total : ' + str(Score)+','+ str(progresser())
                       +'; Hésitation : '+str(Hésitation)+'; Clic_peindre :' + str(Clic_peindre)+'; Use_peindre :' + str(Use_peindre)
                       +'; Clic_ligne :' + str(Clic_ligne)+'; Use_ligne :' + str(Use_ligne)+'; Clic_crayon :' + str(Clic_crayon)
                       +'; Use_crayon :' + str(Clic_crayon)+'; Clic_gomme :' + str(Clic_gomme)+'; Use_gomme :' + str(Use_gomme)
@@ -129,11 +135,15 @@ def peindre():
     Fenetre.dessin.bind("<Button-1>",peindreclic)
     Fenetre.dessin.unbind("<B1-Motion>")
     Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.peindre)
+
     global Clic_peindre
     Clic_peindre=Clic_peindre+1
     adaptation(Fenetre.peindre)
+
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.peindre)
+    if Fenetre.peindreracc!=-1:
+        Fenetre.bouton_actif(Fenetre.raccourcis[Fenetre.peindreracc])
 
 def ligner1(event):
     Fenetre.ligneclic1(event)
@@ -193,11 +203,16 @@ def ligne():
     Fenetre.dessin.bind("<Button-1>",ligner1)
     Fenetre.dessin.bind("<B1-ButtonRelease>",ligner2)
     Fenetre.dessin.unbind("<B1-Motion>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.ligne)
+
     global Clic_ligne
     Clic_ligne=Clic_ligne+1
     adaptation(Fenetre.ligne)
+
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.ligne)
+    if Fenetre.ligneracc!=-1:
+        Fenetre.bouton_actif(Fenetre.raccourcis[Fenetre.ligneracc])
+
 
 def crayonner(event):
     global hésit
@@ -218,11 +233,16 @@ def crayon():
     Fenetre.dessin.bind("<Button-1>",crayonner)
     Fenetre.dessin.bind("<B1-Motion>",crayonner)
     Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.crayon)
+
     global Clic_crayon
     Clic_crayon=Clic_crayon+1
     adaptation(Fenetre.crayon)
+
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.crayon)
+    if Fenetre.crayonracc!=-1:
+        Fenetre.bouton_actif(Fenetre.raccourcis[Fenetre.crayonracc])
+
 
 def gommer(event):
     global hésit
@@ -243,11 +263,15 @@ def gomme():
     Fenetre.dessin.bind("<Button-1>",gommer)
     Fenetre.dessin.bind("<B1-Motion>",gommer)
     Fenetre.dessin.unbind("<B1-ButtonRelease>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.gomme)
+
     global Clic_gomme
     Clic_gomme=Clic_gomme+1
     adaptation(Fenetre.gomme)
+
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.gomme)
+    if Fenetre.gommeracc!=-1:
+        Fenetre.bouton_actif(Fenetre.raccourcis[Fenetre.gommeracc])
 
 
 def selecer1(event):
@@ -291,11 +315,16 @@ def selec():
     Fenetre.dessin.bind("<Button-1>",selecer1)
     Fenetre.dessin.bind("<B1-ButtonRelease>",selecer2)
     Fenetre.dessin.unbind("<B1-Motion>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.selec)
+
     global Clic_selec
     Clic_selec=Clic_selec+1
     adaptation(Fenetre.selec)
+    
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.selec)
+    if Fenetre.selecracc!=-1:
+        Fenetre.bouton_actif(Fenetre.raccourcis[Fenetre.selecracc])
+
 
 def copier():
     hesiter()
@@ -312,6 +341,7 @@ def copier():
                 del (Dessin.copieC[k][i])
         if (Dessin.copieC[k])==[]:
             del (Dessin.copieC[k])
+
     global Clic_copier
     Clic_copier=Clic_copier+1
     adaptation(Fenetre.copier)
@@ -340,11 +370,16 @@ def coller():
     Fenetre.dessin.bind("<Button-1>",collerclic)
     Fenetre.dessin.unbind("<B1-ButtonRelease>")
     Fenetre.dessin.unbind("<B1-Motion>")
-    Fenetre.desactiver_boutons()
-    Fenetre.bouton_actif(Fenetre.coller)
+
     global Clic_coller
     Clic_coller=Clic_coller+1
     adaptation(Fenetre.coller)
+    
+    Fenetre.desactiver_boutons()
+    Fenetre.bouton_actif(Fenetre.coller)
+    if Fenetre.collerracc!=-1:
+        Fenetre.bouton_actif(Fenetre.raccourcis[Fenetre.collerracc])
+
 
 def suppr():
     hesiter()
@@ -398,11 +433,11 @@ def suivanter():
 
 
 def suivant():
-   #cette fonction définit la séquence de modèles de référence : les mod impairs pour la statique, les mod pairs pour l'adaptative
+   #cette fonction définit la séquence de modèles de référence : les mod impairs ou les mod pairs
     global Clic_suivant
     Clic_suivant=Clic_suivant+1
     adaptation(Fenetre.suivant)
-    if Adaptative==1:
+    if Sequence==1:
         if Score==0:
             mod4()
             suivanter()
@@ -449,7 +484,7 @@ def suivant():
             fin()
             suivanter()
  
-    elif Adaptative==0:
+    elif Sequence==0:
         if Score==0:
             mod3()
             suivanter()
@@ -943,11 +978,12 @@ def mod30():
         5,5,3,3,3,3,5,5,2,5,5,3,3,3,3,3,3,5,5,5,5,3,3,5,5,3,3,5,5,1,5,5,5,5,5,5,5,5,0,1,1,5,5,3,3,5,5,0,0,1,3,3,0,3,3,1,3,3,0,3,3,0,
         3,3,3,3,1,3,3,3,0,0,3,2,2,3,1,1,3,3,0,0,3,2,2,3,1,1,3,0,0,3,3,2,2,3,3,1,1,0,0,3,2,2,2,2,3,1,1,0,3,3,2,2,2,2,3,3,1)
 
-if Adaptative==1:
+if Sequence==1:
     mod2()
-elif Adaptative==0:
+elif Sequence==0:
     mod1()
-#exemple() à activer pour la démo pré-test
+if Démo==1:
+    exemple() #à activer pour la démo pré-test
 
 temps_ecoule()
 Fenetre.loop() #permet de faire tourner la fenêtre, doit être à la fin
