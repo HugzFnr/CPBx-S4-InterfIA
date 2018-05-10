@@ -1,0 +1,1 @@
+données test : Interface :  adaptative; Séquence : impaire; Score total : 0,0; Hésitation : 0; Clic_peindre :0; Use_peindre :0; Clic_ligne :0; Use_ligne :0; Clic_crayon :0; Use_crayon :0; Clic_gomme :0; Use_gomme :0; Clic_selec :0; Use_selec :0; Clic_copier :0; Clic_coller :0; Clic_suppr :0; Use_coller :0; Clic_suivant :0

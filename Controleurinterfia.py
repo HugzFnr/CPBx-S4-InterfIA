@@ -34,9 +34,8 @@ hésit=0
 #enfin un peu près
 #les fonctions associés aux boutons sont écrits dans l'ordre de l'interface en lecture de gauche à droite
 
-
 def temps_ecoule():
-    Fenetre.fenetre.after(Timer-2000,Data)               #on minute la session de test pour préciser les données
+    Fenetre.fenetre.after(Timer-2000,Data)  #on minute la session de test pour préciser les données
     Fenetre.fenetre.after(Timer,lafin)
 
 def Data():
@@ -598,9 +597,6 @@ def adaptation(bouton):
 
             Fenetre.creer_raccourci(bouton,8-k)
             Fenetre.update_raccourcis()
-
-def data():
-    print("peindre",Clic_peindre,"ligne",Clic_ligne,"crayon",Clic_crayon,"gomme",Clic_gomme,"selec",Clic_selec,"copier",Clic_copier,"coller",Clic_coller,"suppr",Clic_suppr,"suivant",Clic_suivant)
         
 Fenetre.peindre.configure(command=peindre)
 Fenetre.ligne.configure(command=ligne)

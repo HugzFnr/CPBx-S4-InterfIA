@@ -83,7 +83,6 @@ class Vue():
         self.dessin=Canvas(self.fenetre, width=largeur, height=hauteur, bg="white")
         #ces dimensions remplissent convenablement un écran 1280x768 en echelle=1, alors qu'1.6 fonctionne bien sur du 20 pouces
 
-        #une colonne et une ligne sont définies par la moitié du plus petit format d'icône
         #6 lignes sur 6 colonnes = 1 grosse icone (1)=70x70 pixels
         self.reference.grid(row=6, rowspan=54, column=0, columnspan=30)
         self.dessin.grid(row=6, rowspan=54, column=36, columnspan=30)
