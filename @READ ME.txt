@@ -1,0 +1,5 @@
+Bienvenue sur notre git.
+Interfia est un logiciel développé dans le cadre d'un projet encadré CPBx 2A par Alice Draillard et Hugo Fournier.
+Si vous voulez en savoir plus ou utiliser notre code contactez-nous : alice.draillard@laposte.net et hugfnr@gmail.com
+
+Bonne journée.
