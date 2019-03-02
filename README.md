@@ -10,4 +10,4 @@ You can play with the adaptative GUI, which are shortcuts appearing on the middl
 
 This project was made by Alice DRAILLARD and Hugo FOURNIER for our CPBx 2nd year project (from January to April 2018)) with the aim of learning User Centered Design and to experiment about light AI elements to help Human Computer Interaction.
 
-The results weren't significative with only 13 testers and small differences.
+The results weren't significative with only 13 testers and small differences and the numbers we had evaluated.
