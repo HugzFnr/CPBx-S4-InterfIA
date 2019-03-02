@@ -1,6 +1,6 @@
 # InterfIA
 
-A drawing game with some basic functions and with big pixels. In a limited time, you have to exactly copy a maximum of models (left side) on your grid (right side).
+A drawing game with some basic functions and with big pixels. In a limited timer, you have to exactly copy a maximum of models (left side) on your grid (right side).
 
 There are a total of 36 models, 18 in each streak (odd and even, you can activate one or another in the parameters file). 
 
